@@ -1946,6 +1946,7 @@ function applyData(data) {
     }))
     .filter((r) => r.projectCode && r.name);
 
+  invalidateQtrTally();
   if (!state.activeDesigner || !state.designers.includes(state.activeDesigner))
     state.activeDesigner = state.designers[0] || null;
   renderAll();
@@ -2093,6 +2094,7 @@ async function setEntry(d, y, m, day, q, val) {
   const old = state.entries[k] || "";
   if (val) state.entries[k] = val;
   else delete state.entries[k];
+  invalidateQtrTally();
   clearCache();
   const designerObj = state._designerByName[d];
   const projectObj = val ? state._projectByCode[val] : null;
@@ -2436,19 +2438,32 @@ function openAllocSearch(sel, qsels, idx) {
   setTimeout(() => { input.focus(); document.addEventListener("pointerdown", _allocOutside, true); }, 0);
 }
 
-function calcProjectQuarters(projectCode) {
-  let t = 0;
-  for (const [, v] of Object.entries(state.entries)) {
-    if (v === projectCode) t++;
+// ── Quarter tallies (cached) ───────────────────────────
+// Re-scanning all entries per project per designer was O(projects × designers × entries).
+// We build two lookup maps once and reuse them; invalidated whenever entries change.
+let _qtrTally = null;
+function buildQtrTally() {
+  const byCode = Object.create(null);          // code → total quarters
+  const byDesignerCode = Object.create(null);  // "designer|code" → quarters
+  for (const k in state.entries) {
+    const v = state.entries[k];
+    if (!v) continue;
+    byCode[v] = (byCode[v] || 0) + 1;
+    const designer = k.slice(0, k.indexOf("|"));
+    const dk = designer + "|" + v;
+    byDesignerCode[dk] = (byDesignerCode[dk] || 0) + 1;
   }
-  return t;
+  _qtrTally = { byCode, byDesignerCode };
+  return _qtrTally;
+}
+function invalidateQtrTally() { _qtrTally = null; }
+function calcProjectQuarters(projectCode) {
+  const t = _qtrTally || buildQtrTally();
+  return t.byCode[projectCode] || 0;
 }
 function calcDesignerProjectQuarters(designer, projectCode) {
-  let t = 0;
-  for (const [k, v] of Object.entries(state.entries)) {
-    if (v === projectCode && k.startsWith(designer + "|")) t++;
-  }
-  return t;
+  const t = _qtrTally || buildQtrTally();
+  return t.byDesignerCode[designer + "|" + projectCode] || 0;
 }
 function calcProjectCost(proj) {
   const qtrs = calcProjectQuarters(proj.code);
@@ -6660,6 +6675,7 @@ sb_client.auth.onAuthStateChange((event, session) => {
     state.designers = [];
     state.projects = [];
     state.entries = {};
+    invalidateQtrTally();
     state.consultants = [];
     state.preconstruction = [];
     document.getElementById("boot-screen").style.display = "none";
