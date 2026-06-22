@@ -1364,15 +1364,20 @@ function activeDesignersForMonth(y, m) {
 // ════════════════════════════════════════════════════════
 // ─── Role-based access control ────────────────────────────────────────────────
 const DESIGNER_TABS = ["sheet", "summary", "burn", "preconstruction"]; // tabs designers can see
+// Sales role: read-only access to Fee Tracking + Sales sections only
+const SALES_TABS = ["burn", "feereality", "mfbfees", "consultants", "notbudgeted", "salesanalysis", "pipeline", "calibrator", "clients"];
 
 function applyRole(role) {
   userRole = role;
   if (role === "admin") return; // admin sees everything
 
-  // Hide all nav items not in DESIGNER_TABS
+  // Which tabs is this role allowed to see?
+  const allowed = role === "sales" ? SALES_TABS : DESIGNER_TABS;
+
+  // Hide all nav items not in the allowed list
   document.querySelectorAll(".nav-item").forEach((btn) => {
     const tab = btn.dataset.tab;
-    if (tab && !DESIGNER_TABS.includes(tab)) {
+    if (tab && !allowed.includes(tab)) {
       btn.style.display = "none";
     }
   });
@@ -1392,10 +1397,10 @@ function applyRole(role) {
     if (!hasVisible) section.style.display = "none";
   });
 
-  // If current tab is not allowed, switch to sheet
+  // If current tab is not allowed, switch to the first allowed tab
   const currentTab = document.querySelector(".nav-item.active");
-  if (currentTab && !DESIGNER_TABS.includes(currentTab.dataset.tab)) {
-    switchTab("sheet");
+  if (currentTab && !allowed.includes(currentTab.dataset.tab)) {
+    switchTab(allowed[0]);
   }
 
   // Hide edit/add/delete buttons throughout
@@ -1485,7 +1490,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-console.log("MFB Studio V9 — build-20260618-1030");
+console.log("MFB Studio V9 — build-20260622-0721");
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
   try {
