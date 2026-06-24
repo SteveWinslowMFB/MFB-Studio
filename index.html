@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFB Studio V9.6 - Rebuilt DB</title>
+<title>MFB Studio V9.8 - Rebuilt DB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
@@ -486,12 +486,12 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
     <div class="nav-section">Sales</div>
     <button class="nav-item" data-label="Sales Analysis" data-tab="salesanalysis" onclick="switchTab('salesanalysis')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13L6 9l2.5 2.5L12 7M13 7h-3v3"></path></svg><span class="nav-label">Sales Analysis</span></button>
     <button class="nav-item" data-label="Pipeline" data-tab="pipeline" onclick="switchTab('pipeline')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12l-4.5 5.5V13l-3 1V8.5L2 3z"></path></svg><span class="nav-label">Pipeline</span></button>
+    <button class="nav-item" data-label="Sales Charts" data-tab="salescharts" onclick="switchTab('salescharts')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13L6 9l2.5 2.5L12 7M13 7h-3v3"></path></svg><span class="nav-label">Sales Charts</span></button>
     <button class="nav-item" data-label="Quote Calibrator" data-tab="calibrator" onclick="switchTab('calibrator')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"></circle><path d="M8 2v3M8 11v3M2 8h3M11 8h3"></path></svg><span class="nav-label">Quote Calibrator</span></button>
     <button class="nav-item" data-label="Clients" data-tab="clients" onclick="switchTab('clients')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="2.5"></circle><circle cx="11" cy="5" r="2.5"></circle><path d="M1 14c0-2.2 1.8-4 4-4h6c2.2 0 4 1.8 4 4"></path></svg><span class="nav-label">Clients</span></button>
     <div class="nav-section">Commercial</div>
-    <button class="nav-item" data-label="P&amp;L" data-tab="pl" onclick="switchTab('pl')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12h12M2 4h12M5 8h6"></path><circle cx="4" cy="8" r="1.5"></circle><circle cx="12" cy="8" r="1.5"></circle></svg><span class="nav-label">P&amp;L</span></button>
     <button class="nav-item" data-label="Resource Load" data-tab="resource" onclick="switchTab('resource')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="2"></circle><circle cx="11" cy="5" r="2"></circle><path d="M1 13c0-2.2 1.8-4 4-4s4 1.8 4 4"></path><path d="M9 13c0-2.2 1.8-4 4-4"></path></svg><span class="nav-label">Resource Load</span></button>
-    <button class="nav-item" data-label="Charts" data-tab="salescharts" onclick="switchTab('salescharts')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="3" height="6" rx="1"></rect><rect x="6.5" y="5" width="3" height="9" rx="1"></rect><rect x="11" y="2" width="3" height="12" rx="1"></rect></svg><span class="nav-label">Charts</span></button>
+
     <button class="nav-item" data-label="Target Bands" data-tab="targets" onclick="switchTab('targets')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"></circle><circle cx="8" cy="8" r="3"></circle><circle cx="8" cy="8" r="1"></circle></svg><span class="nav-label">Target Bands</span></button>
     <div class="nav-section">Projects</div>
     <button class="nav-item" data-label="Project Info" data-tab="projects" onclick="switchTab('projects')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1.5"></rect><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"></path></svg><span class="nav-label">Project Info</span></button>
@@ -641,8 +641,10 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 
     <!-- SALES CHARTS -->
     <div id="tab-salescharts" class="tab-content">
-      <div class="page-header"><div><h1>Charts</h1><p>Practice performance at a glance</p></div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="page-header"><div><h1>Sales Charts</h1><p>Pipeline performance, conversion trends &amp; sales cost analysis</p></div></div>
+
+      <!-- Row 1: Pipeline + Sunk Cost -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
         <div class="card" style="margin-bottom:0">
           <div class="card-header"><h2>P→C Pipeline — Design Cost by Prospect</h2></div>
           <div class="card-body"><p style="font-size:12px;color:var(--text3);margin-bottom:10px">Each bar is a P-coded prospect, ranked by design hours invested. <strong style="color:var(--accent)">Blue = project won</strong> (converted to a C-code). <strong style="color:#aaa">Grey = still in pipeline.</strong></p><div style="display:flex;gap:10px"><div style="flex:1" id="sc-pipeline-chart"></div><div id="sc-pipeline-stats" style="width:80px;flex-shrink:0"></div></div></div>
@@ -657,6 +659,8 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
           </div>
         </div>
       </div>
+
+
     </div>
 
     <!-- FEE REALITY -->
@@ -820,34 +824,6 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
         <thead><tr><th>Project name</th><th>Location</th><th class="num">CV</th><th class="num">GIFA</th><th>Status</th></tr></thead>
         <tbody id="client-list"></tbody>
       </table></div></div>
-    </div>
-
-    <!-- P&L -->
-    <div id="tab-pl" class="tab-content">
-      <div class="page-header"><div><h1>P&amp;L</h1><p>Practice profit &amp; loss — last 12 months</p></div>
-        <select class="sel-compact" id="pl-view" onchange="renderPL()"><option value="monthly">Monthly</option><option value="cumulative">Cumulative</option></select>
-      </div>
-      <div id="pl-summary-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px"></div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-header"><h2>Monthly breakdown</h2></div>
-        <div class="card-body" style="padding:0"><canvas id="pl-chart" style="width:100%;height:220px"></canvas></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>Month-by-month detail</h2></div>
-        <div class="card-scroll">
-          <table>
-            <thead><tr>
-              <th>Month</th>
-              <th class="num">Fee income</th>
-              <th class="num">Design cost</th>
-              <th class="num">Overhead cost</th>
-              <th class="num">Gross margin</th>
-              <th class="num">Margin %</th>
-            </tr></thead>
-            <tbody id="pl-body"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
     <!-- RESOURCE LOAD -->
@@ -1208,10 +1184,10 @@ const TAB_TITLES = {
   sheet: "Design Allocation",
   summary: "Monthly Summary",
   burn: "Fee Burn",
-  pl: "P&L",
+
   resource: "Resource Load",
   salesanalysis: "Sales Analysis",
-  salescharts: "Charts",
+  salescharts: "Sales Charts",
   feereality: "Fee Reality",
   projects: "Project Info",
   mfbfees: "MFB Fees",
@@ -1394,7 +1370,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-console.log("MFB Studio V9.6 — build-20260623-1500");
+console.log("MFB Studio V9.8 — build-20260624-1200");
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
   try {
@@ -2070,7 +2046,7 @@ const TAB_RENDERERS = {
   salesanalysis: renderSalesAnalysis,
   salescharts: renderSalesCharts,
   feereality: renderFeeReality,
-  pl: renderPL,
+
   resource: renderResource,
   locations: renderLocations,
   clients: renderClients,
@@ -2830,31 +2806,13 @@ function renderSalesAnalysis() {
 
 // ── Tab: Charts ────────────────────────────────────────
 function renderSalesCharts() {
-  const RC = { red: "var(--red)", amber: "var(--amber)", green: "var(--green)", none: "var(--text3)" };
-  const cProjects = state.projects
-    .filter((p) => p.code && /^C\d/.test(p.code))
-    .map((p) => {
-      const arch = parseFloat(p.arch) || 0,
-        regs = parseFloat(p.regs) || 0,
-        bsa = parseFloat(p.bsa) || 0;
-      const quoted = arch + regs + bsa;
-      const qtrs = calcProjectQuarters(p.code);
-      const hrs = qtrs * state.hpq;
-      const archR = p.archRate || state.rate;
-      let cost;
-      if (arch > 0 && regs + bsa > 0) {
-        const as = arch / quoted,
-          os = (regs + bsa) / quoted;
-        cost = Math.round((hrs * as * archR + hrs * os * state.rate) * 100) / 100;
-      } else {
-        cost = hrs * (arch > 0 ? archR : state.rate);
-      }
-      const pct = quoted > 0 ? (cost / quoted) * 100 : null;
-      const rag = pct === null ? "none" : pct >= 100 ? "red" : pct >= 75 ? "amber" : "green";
-      return { code: p.code, quoted, cost, pct, rag };
-    })
-    .filter((p) => p.quoted > 0)
-    .sort((a, b) => b.pct - a.pct);
+  _renderPipelineBarChart();
+  _renderSunkCostDonut();
+}
+
+// ── P→C Pipeline bar chart ───────────────────────────────
+function _renderPipelineBarChart() {
+  // Build P-project cost data
   const cNums = new Set(state.projects.filter((p) => p.code && /^C\d/.test(p.code)).map((p) => p.code.trim().slice(1)));
   const nameToP = {};
   state.projects.forEach((p) => {
@@ -2870,153 +2828,54 @@ function renderSalesCharts() {
     .map((p) => {
       const pn = p.code.trim().slice(1);
       const qtrs = pQtrs[pn] || 0;
-      const cost = qtrs * state.hpq * state.rate;
+      const cost = calcProjectCostWeighted(p.code) || qtrs * state.hpq * state.rate;
       return { code: p.code, cost, converted: cNums.has(pn) };
     })
     .sort((a, b) => b.cost - a.cost);
-  (function () {
-    const canvas = document.getElementById("sc-burn-chart");
-    if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1,
-      W = canvas.parentElement.offsetWidth || 700,
-      H = 260;
-    canvas.style.width = W + "px";
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, W, H);
-    if (!cProjects.length) {
-      ctx.fillStyle = "var(--text3)";
-      ctx.font = "13px system-ui";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("No C projects with quoted fees yet", W / 2, H / 2);
-      return;
+  // Pipeline bar chart
+  const top = allP.filter((p) => p.cost > 0).slice(0, 16);
+  const maxC = top[0]?.cost || 1;
+  const convN = allP.filter((p) => p.converted).length;
+  const convR = allP.length ? Math.round((convN / allP.length) * 100) : 0;
+  const pEl = document.getElementById("sc-pipeline-chart");
+  if (pEl)
+    pEl.innerHTML = top.map((p) =>
+      `<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><div style="width:42px;font-size:9px;color:var(--text3);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.code}</div><div style="flex:1;height:8px;background:var(--surface2);border-radius:2px"><div style="width:${(p.cost / maxC) * 100}%;height:100%;background:${p.converted ? "var(--accent)" : "var(--border2)"};border-radius:2px"></div></div><div style="width:34px;font-size:9px;text-align:right;color:${p.converted ? "var(--accent)" : "var(--text3)"};flex-shrink:0">${fmtK(p.cost)}</div></div>`
+    ).join("");
+  const sEl = document.getElementById("sc-pipeline-stats");
+  if (sEl)
+    sEl.innerHTML = `<div class="metric blue" style="margin-bottom:5px;padding:8px 10px;min-width:0"><div class="metric-label">Won</div><div class="metric-value" style="font-size:18px">${convN}</div></div><div class="metric" style="margin-bottom:5px;padding:8px 10px;min-width:0"><div class="metric-label">Pipeline</div><div class="metric-value" style="font-size:18px;color:var(--text3)">${allP.length - convN}</div></div><div class="metric blue" style="padding:8px 10px;min-width:0"><div class="metric-label">Win rate</div><div class="metric-value" style="font-size:18px">${convR}%</div></div>`;
+  // Store allP on window for use by other chart functions
+  window._scAllP = allP;
+  window._scConvN = convN;
+}
+
+// ── Sunk Cost Donut ──────────────────────────────────────
+function _renderSunkCostDonut() {
+  const allP = window._scAllP || [];
+  const wonC = allP.filter((p) => p.converted).reduce((s, p) => s + p.cost, 0);
+  const lostC = allP.filter((p) => !p.converted).reduce((s, p) => s + p.cost, 0);
+  const convN = allP.filter((p) => p.converted).length;
+  const avgWin = convN ? Math.round(wonC / convN) : 0;
+  const tot = wonC + lostC || 1;
+  const wonP = wonC / tot;
+  const svg = document.getElementById("sc-donut-svg");
+  if (svg) {
+    const cx = 55, cy = 55, r = 40, sw = 13;
+    function arc(pct, off) {
+      const a = pct * 2 * Math.PI, x1 = cx + r * Math.sin(off), y1 = cy - r * Math.cos(off),
+        x2 = cx + r * Math.sin(off + a), y2 = cy - r * Math.cos(off + a), lg = a > Math.PI ? 1 : 0;
+      return `M${x1},${y1} A${r},${r},0,${lg},1,${x2},${y2}`;
     }
-    const pad = { top: 14, right: 14, bottom: 48, left: 60 };
-    const chartW = W - pad.left - pad.right,
-      chartH = H - pad.top - pad.bottom;
-    const maxVal = Math.max(...cProjects.map((p) => p.quoted), 1);
-    const gridN = 4;
-    ctx.strokeStyle = "var(--surface2)";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= gridN; i++) {
-      const y = pad.top + chartH - (i / gridN) * chartH;
-      ctx.beginPath();
-      ctx.moveTo(pad.left, y);
-      ctx.lineTo(pad.left + chartW, y);
-      ctx.stroke();
-      ctx.fillStyle = "var(--text3)";
-      ctx.font = "10px system-ui";
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
-      ctx.fillText(fmtK(maxVal * (i / gridN)), pad.left - 5, y);
-    }
-    ctx.strokeStyle = "var(--border2)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(pad.left, pad.top);
-    ctx.lineTo(pad.left, pad.top + chartH);
-    ctx.lineTo(pad.left + chartW, pad.top + chartH);
-    ctx.stroke();
-    const groupW = chartW / cProjects.length,
-      barW = Math.max(Math.min(groupW * 0.55, 40), 8),
-      quoteW = Math.max(Math.min(groupW * 0.7, 54), 10);
-    cProjects.forEach((p, i) => {
-      const cx = pad.left + i * groupW + groupW / 2;
-      const qH = (p.quoted / maxVal) * chartH;
-      ctx.fillStyle = "var(--border)";
-      ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(cx - quoteW / 2, pad.top + chartH - qH, quoteW, qH, 2);
-      else ctx.rect(cx - quoteW / 2, pad.top + chartH - qH, quoteW, qH);
-      ctx.fill();
-      if (p.cost > 0) {
-        const cH = Math.min((p.cost / maxVal) * chartH, chartH + 2);
-        ctx.fillStyle = RC[p.rag];
-        ctx.globalAlpha = 0.88;
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(cx - barW / 2, pad.top + chartH - cH, barW, cH, 2);
-        else ctx.rect(cx - barW / 2, pad.top + chartH - cH, barW, cH);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-      ctx.fillStyle = "var(--text2)";
-      ctx.font = "10px system-ui";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillText(p.code.replace(/^C/, ""), cx, pad.top + chartH + 5);
-      if (p.pct !== null) {
-        ctx.fillStyle = RC[p.rag];
-        ctx.font = "bold 9px system-ui";
-        ctx.textBaseline = "top";
-        ctx.fillText(
-          p.pct.toFixed(0) + "%",
-          cx,
-          Math.max(pad.top + chartH - Math.min((p.cost / maxVal) * chartH, chartH) - 14, pad.top),
-        );
-      }
-    });
-    const leg = document.getElementById("sc-burn-legend");
-    if (leg)
-      leg.innerHTML =
-        `<span style="display:inline-flex;align-items:center;gap:3px"><span style="width:11px;height:9px;border-radius:2px;background:var(--border);display:inline-block"></span>Quoted</span>` +
-        ["green", "amber", "red"]
-          .map(
-            (r) =>
-              `<span style="display:inline-flex;align-items:center;gap:3px"><span style="width:11px;height:9px;border-radius:2px;background:${RC[r]};display:inline-block"></span>${r[0].toUpperCase() + r.slice(1)}</span>`,
-          )
-          .join("");
-  })();
-  (function () {
-    const top = allP.filter((p) => p.cost > 0).slice(0, 16);
-    const maxC = top[0]?.cost || 1;
-    const convN = allP.filter((p) => p.converted).length;
-    const convR = allP.length ? Math.round((convN / allP.length) * 100) : 0;
-    const pEl = document.getElementById("sc-pipeline-chart");
-    if (pEl)
-      pEl.innerHTML = top
-        .map(
-          (p) =>
-            `<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><div style="width:42px;font-size:9px;color:var(--text3);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.code}</div><div style="flex:1;height:8px;background:var(--surface2);border-radius:2px"><div style="width:${(p.cost / maxC) * 100}%;height:100%;background:${p.converted ? "var(--accent)" : "var(--border2)"};border-radius:2px"></div></div><div style="width:34px;font-size:9px;text-align:right;color:${p.converted ? "var(--accent)" : "var(--text3)"};flex-shrink:0">${fmtK(p.cost)}</div></div>`,
-        )
-        .join("");
-    const sEl = document.getElementById("sc-pipeline-stats");
-    if (sEl)
-      sEl.innerHTML = `<div class="metric blue" style="margin-bottom:5px;padding:8px 10px;min-width:0"><div class="metric-label">Won</div><div class="metric-value" style="font-size:18px">${convN}</div></div><div class="metric" style="margin-bottom:5px;padding:8px 10px;min-width:0"><div class="metric-label">Pipeline</div><div class="metric-value" style="font-size:18px;color:var(--text3)">${allP.length - convN}</div></div><div class="metric blue" style="padding:8px 10px;min-width:0"><div class="metric-label">Win rate</div><div class="metric-value" style="font-size:18px">${convR}%</div></div>`;
-  })();
-  (function () {
-    const wonC = allP.filter((p) => p.converted).reduce((s, p) => s + p.cost, 0);
-    const lostC = allP.filter((p) => !p.converted).reduce((s, p) => s + p.cost, 0);
-    const convN = allP.filter((p) => p.converted).length;
-    const avgWin = convN ? Math.round(wonC / convN) : 0;
-    const tot = wonC + lostC || 1;
-    const wonP = wonC / tot;
-    const svg = document.getElementById("sc-donut-svg");
-    if (svg) {
-      const cx = 55,
-        cy = 55,
-        r = 40,
-        sw = 13;
-      function arc(pct, off) {
-        const a = pct * 2 * Math.PI,
-          x1 = cx + r * Math.sin(off),
-          y1 = cy - r * Math.cos(off),
-          x2 = cx + r * Math.sin(off + a),
-          y2 = cy - r * Math.cos(off + a),
-          lg = a > Math.PI ? 1 : 0;
-        return `M${x1},${y1} A${r},${r},0,${lg},1,${x2},${y2}`;
-      }
-      svg.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--surface2)" stroke-width="${sw}"/><path d="${arc(wonP, 0)}" fill="none" stroke="var(--amber)" stroke-width="${sw}" stroke-linecap="round"/><path d="${arc(1 - wonP, wonP * 2 * Math.PI)}" fill="none" stroke="var(--border)" stroke-width="${sw}" stroke-linecap="round"/>`;
-      const dm = document.getElementById("sc-donut-main");
-      if (dm) dm.textContent = fmtK(avgWin);
-    }
-    const lostPr = allP.filter((p) => !p.converted && p.cost > 0);
-    const cpl = lostPr.length ? Math.round(lostC / lostPr.length) : 0;
-    const det = document.getElementById("sc-sales-detail");
-    if (det)
-      det.innerHTML = `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><div><div>Won (${convN})</div><div style="font-size:10px;color:var(--text3)">Cost invested</div></div><div style="font-weight:600;color:var(--amber)">${fmtK(wonC)}</div></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><div><div>Sunk (${lostPr.length})</div></div><div style="font-weight:600;color:var(--text3)">${fmtK(lostC)}</div></div><div style="display:flex;justify-content:space-between;padding:4px 0"><div>Avg per lost bid</div><div style="font-weight:600">${fmtK(cpl)}</div></div><div style="margin-top:8px"><div style="height:4px;background:var(--surface2);border-radius:99px;overflow:hidden"><div style="width:${Math.round(wonP * 100)}%;height:100%;background:var(--amber);border-radius:99px"></div></div></div>`;
-  })();
+    svg.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--surface2)" stroke-width="${sw}"/><path d="${arc(wonP, 0)}" fill="none" stroke="var(--amber)" stroke-width="${sw}" stroke-linecap="round"/><path d="${arc(1 - wonP, wonP * 2 * Math.PI)}" fill="none" stroke="var(--border)" stroke-width="${sw}" stroke-linecap="round"/>`;
+    const dm = document.getElementById("sc-donut-main");
+    if (dm) dm.textContent = fmtK(avgWin);
+  }
+  const lostPr = allP.filter((p) => !p.converted && p.cost > 0);
+  const cpl = lostPr.length ? Math.round(lostC / lostPr.length) : 0;
+  const det = document.getElementById("sc-sales-detail");
+  if (det)
+    det.innerHTML = `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><div><div>Won (${convN})</div><div style="font-size:10px;color:var(--text3)">Cost invested</div></div><div style="font-weight:600;color:var(--amber)">${fmtK(wonC)}</div></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><div><div>Sunk (${lostPr.length})</div></div><div style="font-weight:600;color:var(--text3)">${fmtK(lostC)}</div></div><div style="display:flex;justify-content:space-between;padding:4px 0"><div>Avg per lost bid</div><div style="font-weight:600">${fmtK(cpl)}</div></div><div style="margin-top:8px"><div style="height:4px;background:var(--surface2);border-radius:99px;overflow:hidden"><div style="width:${Math.round(wonP * 100)}%;height:100%;background:var(--amber);border-radius:99px"></div></div></div>`;
 }
 
 let frMode = "live";
@@ -4824,243 +4683,6 @@ function renderNotBudgeted() {
   tbody.appendChild(tr2);
 }
 
-// ── Tab: P&L ───────────────────────────────────────────
-function renderPL() {
-  const now = new Date();
-  const months = [];
-  for (let i = 11; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({
-      year: d.getFullYear(),
-      month: d.getMonth(),
-      label: d.toLocaleDateString("en-GB", { month: "short", year: "2-digit" }),
-    });
-  }
-
-  // Design cost per month — quarters logged × hpq × rate
-  const designCostByMonth = months.map(({ year, month }) => {
-    let qtrs = 0;
-    for (const [key] of Object.entries(state.entries)) {
-      const p = key.split("|");
-      if (p.length < 5) continue;
-      if (parseInt(p[1]) === year && parseInt(p[2]) === month) qtrs++;
-    }
-    return calcProjectCostWeighted(proj.code) || qtrs * state.hpq * state.rate;
-  });
-
-  // Fee income per month — apportion each project's total MFB fee evenly across months it has activity
-  // Build: for each C-project, find which months had activity, split fee equally
-  const feeByMonth = months.map(() => 0);
-  const cProjs = state.projects.filter((p) => p.code && /^C\d/.test(p.code));
-  cProjs.forEach((proj) => {
-    const totalFee = (parseFloat(proj.arch) || 0) + (parseFloat(proj.regs) || 0) + (parseFloat(proj.bsa) || 0);
-    if (!totalFee) return;
-    const activeMonths = new Set();
-    for (const [key, v] of Object.entries(state.entries)) {
-      if (v !== proj.name) continue;
-      const p = key.split("|");
-      if (p.length < 5) continue;
-      const mi = months.findIndex((m) => m.year === parseInt(p[1]) && m.month === parseInt(p[2]));
-      if (mi >= 0) activeMonths.add(mi);
-    }
-    if (!activeMonths.size) return;
-    const perMonth = totalFee / activeMonths.size;
-    activeMonths.forEach((mi) => {
-      feeByMonth[mi] += perMonth;
-    });
-  });
-
-  // Consultant cost — lump actual costs into current month (no invoice date available)
-  // spread evenly across all 12 months as a proxy
-  const totalConCost = state.consultants.reduce((s, con) => {
-    const v = con.actualCost !== null ? con.actualCost : con.fee || 0;
-    return s + v;
-  }, 0);
-  const conCostPerMonth = totalConCost / 12;
-  const conByMonth = months.map(() => conCostPerMonth);
-
-  // Build rows
-  const rows = months.map((m, i) => ({
-    label: m.label,
-    fee: Math.round(feeByMonth[i]),
-    design: Math.round(designCostByMonth[i]),
-    con: Math.round(conByMonth[i]),
-    total: Math.round(designCostByMonth[i] + conByMonth[i]),
-    margin: Math.round(feeByMonth[i] - designCostByMonth[i] - conByMonth[i]),
-  }));
-
-  const view = (document.getElementById("pl-view") || { value: "monthly" }).value;
-  if (view === "cumulative") {
-    let cf = 0,
-      cd = 0,
-      cc = 0;
-    rows.forEach((r) => {
-      cf += r.fee;
-      cd += r.design;
-      cc += r.con;
-      r.fee = cf;
-      r.design = cd;
-      r.con = cc;
-      r.total = cd + cc;
-      r.margin = cf - cd - cc;
-    });
-  }
-
-  // Summary cards
-  const totFee = rows[rows.length - 1]
-    ? view === "cumulative"
-      ? rows[rows.length - 1].fee
-      : rows.reduce((s, r) => s + r.fee, 0)
-    : 0;
-  const totDesign = view === "cumulative" ? rows[rows.length - 1].design : rows.reduce((s, r) => s + r.design, 0);
-  const totCon = view === "cumulative" ? rows[rows.length - 1].con : rows.reduce((s, r) => s + r.con, 0);
-  const totMargin = totFee - totDesign - totCon;
-  const marginPct = totFee > 0 ? Math.round((totMargin / totFee) * 100) : 0;
-  const cards = document.getElementById("pl-summary-cards");
-  if (cards)
-    cards.innerHTML = [
-      {
-        label: "Fee commitment (12m)",
-        val: fmtGBP(totFee),
-        sub: "quoted fee apportioned across active months",
-        col: "var(--accent)",
-      },
-      { label: "Design cost (12m)", val: fmtGBP(totDesign), sub: "hours × rate", col: "var(--text2)" },
-      {
-        label: "Gross margin (12m)",
-        val: fmtGBP(totMargin),
-        sub: marginPct + "% margin",
-        col: totMargin >= 0 ? "var(--green)" : "var(--red)",
-      },
-    ]
-      .map(
-        ({ label, val, sub, col }) =>
-          `<div class="card" style="padding:14px 16px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">${label}</div><div style="font-size:22px;font-weight:700;color:${col}">${val}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${sub}</div></div>`,
-      )
-      .join("");
-
-  // Chart
-  const canvas = document.getElementById("pl-chart");
-  if (canvas) {
-    const dpr = window.devicePixelRatio || 1,
-      W = canvas.parentElement.offsetWidth || 700,
-      H = 220;
-    canvas.style.width = W + "px";
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, W, H);
-    const pad = { top: 16, right: 16, bottom: 32, left: 64 },
-      cW = W - pad.left - pad.right,
-      cH = H - pad.top - pad.bottom;
-    const feeVals = rows.map((r) => r.fee),
-      costVals = rows.map((r) => r.design),
-      margVals = rows.map((r) => r.margin);
-    const allVals = [...feeVals, ...costVals, ...margVals];
-    const minV = Math.min(...allVals, 0),
-      maxV = Math.max(...allVals, 1),
-      range = maxV - minV || 1;
-    const toY = (v) => pad.top + cH - ((v - minV) / range) * cH;
-    // Zero line
-    ctx.strokeStyle = "var(--border2)";
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 3]);
-    ctx.beginPath();
-    ctx.moveTo(pad.left, toY(0));
-    ctx.lineTo(pad.left + cW, toY(0));
-    ctx.stroke();
-    ctx.setLineDash([]);
-    // Cost bars
-    const bSlot = cW / rows.length,
-      bW = Math.max(bSlot * 0.55, 4);
-    rows.forEach((r, i) => {
-      const x = pad.left + i * bSlot + (bSlot - bW) / 2;
-      const y0 = toY(0);
-      const yC = toY(r.design);
-      ctx.fillStyle = "rgba(37,99,235,0.15)";
-      ctx.fillRect(x, Math.min(y0, yC), bW, Math.abs(y0 - yC));
-    });
-    // Fee line (blue)
-    ctx.strokeStyle = "var(--accent)";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([]);
-    ctx.beginPath();
-    rows.forEach((v, i) => {
-      const x = pad.left + i * bSlot + bSlot / 2,
-        y = toY(v.fee);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-    // Margin line (green/red dashed)
-    const marginColor = totMargin >= 0 ? "var(--green)" : "var(--red)";
-    ctx.strokeStyle = marginColor;
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([4, 3]);
-    ctx.beginPath();
-    rows.forEach((v, i) => {
-      const x = pad.left + i * bSlot + bSlot / 2,
-        y = toY(v.margin);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-    ctx.setLineDash([]);
-    // X labels
-    ctx.fillStyle = "var(--text3)";
-    ctx.font = "9px system-ui";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
-    rows.forEach((r, i) => {
-      if (i % 2 === 0 || i === rows.length - 1)
-        ctx.fillText(r.label, pad.left + i * bSlot + bSlot / 2, pad.top + cH + 5);
-    });
-    // Y labels
-    ctx.textAlign = "right";
-    ctx.textBaseline = "middle";
-    [minV, 0, maxV].filter((v, i, a) => a.indexOf(v) === i).forEach((v) => ctx.fillText(fmtK(v), pad.left - 4, toY(v)));
-    // Axes
-    ctx.strokeStyle = "var(--border)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(pad.left, pad.top);
-    ctx.lineTo(pad.left, pad.top + cH);
-    ctx.lineTo(pad.left + cW, pad.top + cH);
-    ctx.stroke();
-    // Legend
-    ctx.font = "10px system-ui";
-    ctx.textAlign = "left";
-    [
-      [0, "var(--accent)", "Fee commitment"],
-      [100, marginColor, "Gross margin"],
-      [200, "rgba(37,99,235,0.4)", "Design cost"],
-    ].forEach(([x, col, lbl]) => {
-      ctx.fillStyle = col;
-      ctx.fillRect(pad.left + x, pad.top + 2, 10, 3);
-      ctx.fillStyle = "var(--text3)";
-      ctx.fillText(lbl, pad.left + x + 14, pad.top + 4);
-    });
-  }
-
-  // Table
-  const tbody = document.getElementById("pl-body");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  rows.forEach((r) => {
-    const pct = r.fee > 0 ? Math.round((r.margin / r.fee) * 100) : null;
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td style="font-weight:500">${r.label}</td>
-      <td class="num" style="color:var(--accent)">${fmtGBP(r.fee)}</td>
-      <td class="num">${fmtGBP(r.design)}</td>
-      <td class="num" style="font-weight:600;color:${r.margin >= 0 ? "var(--green)" : "var(--red)"}">${fmtGBP(r.margin)}</td>
-      <td class="num" style="color:${pct !== null && pct >= 0 ? "var(--green)" : "var(--red)"}">${pct !== null ? pct + "%" : "–"}</td>`;
-    tbody.appendChild(tr);
-  });
-  const tr2 = document.createElement("tr");
-  tr2.className = "total-row";
-  const avgPct = totFee > 0 ? Math.round((totMargin / totFee) * 100) : null;
-  tr2.innerHTML = `<td>12-month total</td><td class="num">${fmtGBP(totFee)}</td><td class="num">${fmtGBP(totDesign)}</td><td class="num" style="font-weight:700;color:${totMargin >= 0 ? "var(--green)" : "var(--red)"}">${fmtGBP(totMargin)}</td><td class="num">${avgPct !== null ? avgPct + "%" : "–"}</td>`;
-  tbody.appendChild(tr2);
-}
 function archiveProject(i) {
   const p = state.projects[i];
   if (!p) return;
