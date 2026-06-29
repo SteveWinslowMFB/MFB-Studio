@@ -2397,6 +2397,7 @@ function designerRate(name) {
 }
 // Return hourly rate for a named precon staff member (falls back to global PC_RATE)
 function preconRate(name) {
+  // Precon rates are entirely separate from designer rates — no crossover
   const obj = (state.allPreconStaffObjects || []).find((o) => o.name === name);
   return (obj && obj.rate != null) ? obj.rate : PC_RATE;
 }
@@ -4430,16 +4431,16 @@ function renderSettingsTargets() {
 function renderPreConstruction() {
   const _pcr = document.getElementById("pc-rate-input");
   if (_pcr) _pcr.value = PC_RATE;
-  // KPI strip
+  // KPI strip — use per-person rates for accurate total cost
   const totalHrs = state.preconstruction.reduce((s, r) => s + r.hours, 0);
-  const totalCost = totalHrs * PC_RATE;
+  const totalCost = state.preconstruction.reduce((s, r) => s + r.hours * preconRate(r.name), 0);
   const people = new Set(state.preconstruction.map((r) => r.name)).size;
   const projs = new Set(state.preconstruction.map((r) => r.projectCode)).size;
   const cards = document.getElementById("pc-summary-cards");
   if (cards)
     cards.innerHTML = [
       { label: "Total hours", val: totalHrs.toFixed(1) + "h", sub: `${people} team member${people !== 1 ? "s" : ""}` },
-      { label: "Total cost", val: fmtGBP(Math.round(totalCost)), sub: `@ £${PC_RATE}/hr` },
+      { label: "Total cost", val: fmtGBP(Math.round(totalCost)), sub: "per-person rates" },
       { label: "Projects tracked", val: projs, sub: "P-projects with logged time" },
     ]
       .map(
@@ -4609,13 +4610,15 @@ function setPCRate(v) {
 }
 // Live precon team = active precon staff + active designers (so Steve W can log here too)
 function getPCTeam() {
-  const y = state.year,
-    m = state.month;
-  const firstOfMonth = new Date(y, m, 1);
-  // Pre-con staff only (managed in Settings). Active = no leave date, or leave date after this month.
-  return (state.allPreconStaffObjects || [])
+  const firstOfMonth = new Date(state.year, state.month, 1);
+  const preconNames = (state.allPreconStaffObjects || [])
     .filter((o) => !o.archiveDate || o.archiveDate > firstOfMonth)
     .map((o) => o.name);
+  const designerNames = (state.allDesignerObjects || [])
+    .filter((o) => !o.archiveDate || o.archiveDate > firstOfMonth)
+    .map((o) => o.name);
+  // Merge, deduplicate, sort
+  return [...new Set([...preconNames, ...designerNames])].sort();
 }
 function updatePCPersonRows() {
   const wrap = document.getElementById("pc-person-rows");
@@ -4967,7 +4970,7 @@ function renderResource() {
       <td class="num">${r.impliedHrs}</td>
       <td>${bar}</td>
       <td style="white-space:nowrap">${dcStr}</td>
-      <td><button class="btn btn-sm" onclick="archiveProject(${r.projIdx})" title="${r.projStatus === "archived" ? "Restore to active" : "Archive — remove from load view"}" style="color:${r.projStatus === "archived" ? "var(--green)" : "var(--text3)"};border-color:${r.projStatus === "archived" ? "var(--green)" : "var(--border)"};font-size:11px">${r.projStatus === "archived" ? "Restore" : "Archive"}</button></td>`;
+      <td><button class="btn btn-sm" onclick="showAddProjectModal(${r.projIdx})" style="font-size:11px">Edit</button></td>`;
     tbody.appendChild(tr);
   });
   const tr2 = document.createElement("tr");
@@ -5524,6 +5527,11 @@ async function addPreconStaff() {
   const val = inp.value.trim();
   if (!val) return;
   state.allPreconStaffObjects = state.allPreconStaffObjects || [];
+  // Guard against duplicate names
+  if (state.allPreconStaffObjects.some((o) => o.name.toLowerCase() === val.toLowerCase())) {
+    alert(`"${val}" already exists in the pre-construction team.`);
+    return;
+  }
   state.allPreconStaffObjects.push({ name: val, archiveDate: null });
   const _t = new Date();
   _t.setHours(0, 0, 0, 0);
