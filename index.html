@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFB Studio V10.3 - Rebuilt DB</title>
+<title>MFB Studio V10.4 - Rebuilt DB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
@@ -1110,7 +1110,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 </div>
 <script>
 // ╔═══════════════════════════════════════════════════════════════════════════╗
-// ║  MFB STUDIO V10.3 — REBUILT DB\n// build-20260629-2100                                               ║
+// ║  MFB STUDIO V10.4 — REBUILT DB\n// build-20260629-2200                                               ║
 // ║  Sections: CONFIG · UTILS · AUTH · CACHE · DATA · SHELL · TABS           ║
 // ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -1379,7 +1379,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-const BUILD = { version: '10.3', date: '2026-06-24', label: 'MFB Studio' };
+const BUILD = { version: '10.4', date: '2026-06-24', label: 'MFB Studio' };
 console.log(`%c ${BUILD.label} %c v${BUILD.version} · ${BUILD.date} `, 'background:#2563EB;color:#fff;font-weight:600;padding:2px 0;border-radius:4px 0 0 4px','background:#1C1B18;color:#fff;padding:2px 0;border-radius:0 4px 4px 0');
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
@@ -4608,17 +4608,13 @@ function setPCRate(v) {
   } catch (e) {}
   renderPreConstruction();
 }
-// Live precon team = active precon staff + active designers (so Steve W can log here too)
+// Live precon team = active precon staff only
 function getPCTeam() {
   const firstOfMonth = new Date(state.year, state.month, 1);
-  const preconNames = (state.allPreconStaffObjects || [])
+  return (state.allPreconStaffObjects || [])
     .filter((o) => !o.archiveDate || o.archiveDate > firstOfMonth)
-    .map((o) => o.name);
-  const designerNames = (state.allDesignerObjects || [])
-    .filter((o) => !o.archiveDate || o.archiveDate > firstOfMonth)
-    .map((o) => o.name);
-  // Merge, deduplicate, sort
-  return [...new Set([...preconNames, ...designerNames])].sort();
+    .map((o) => o.name)
+    .sort();
 }
 function updatePCPersonRows() {
   const wrap = document.getElementById("pc-person-rows");
