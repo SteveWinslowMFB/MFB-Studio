@@ -1124,7 +1124,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 </div>
 <script>
 // ╔═══════════════════════════════════════════════════════════════════════════╗
-// ║  MFB STUDIO V9.9.1 — REBUILT DB\n// build-20260629-1000                                               ║
+// ║  MFB STUDIO V10.0 — REBUILT DB\n// build-20260629-1800                                               ║
 // ║  Sections: CONFIG · UTILS · AUTH · CACHE · DATA · SHELL · TABS           ║
 // ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -5024,10 +5024,10 @@ function renderMFBFees() {
       cv = parseFloat(p.cv) || 0;
     const totPctNum = cv > 0 && total > 0 ? (total / cv) * 100 : null;
 
-    // Fee % colour — traffic light based on adequacy
+    // Fee % colour — MFB thresholds: <1% red, 1–1.4% amber, ≥1.4% green
     const pctColor = totPctNum === null ? "var(--text3)"
-      : totPctNum < 5 ? "var(--red)"
-      : totPctNum < 8 ? "var(--amber)"
+      : totPctNum < 1 ? "var(--red)"
+      : totPctNum < 1.4 ? "var(--amber)"
       : "var(--green)";
 
     // Per-fee % labels
@@ -5043,16 +5043,13 @@ function renderMFBFees() {
     const incomplete = missingFees.length > 0 && missingFees.length < 3;
 
     // Mini bar showing fee as % of CV
-    const barWidth = totPctNum !== null ? Math.min(totPctNum / 15 * 100, 100).toFixed(0) : 0;
+    const barWidth = totPctNum !== null ? Math.min(totPctNum / 3 * 100, 100).toFixed(0) : 0;
     const feeBar = cv > 0 && total > 0
       ? `<div style="margin-top:3px;height:3px;background:var(--border);border-radius:99px;width:80px"><div style="width:${barWidth}%;height:100%;background:${pctColor};border-radius:99px"></div></div>`
       : "";
 
     // Row left border colour based on fee health
-    const rowBorder = totPctNum === null ? "transparent"
-      : totPctNum < 5 ? "var(--red)"
-      : totPctNum < 8 ? "var(--amber)"
-      : "var(--green)";
+    const rowBorder = "transparent";
 
     const tr = document.createElement("tr");
     tr.style.borderLeft = `3px solid ${rowBorder}`;
