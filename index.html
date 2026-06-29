@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFB Studio V10.2 - Rebuilt DB</title>
+<title>MFB Studio V10.3 - Rebuilt DB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
@@ -925,21 +925,8 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 
       <!-- Toolbar -->
       <div class="toolbar" style="margin-bottom:14px">
-        <input type="text" class="sel-compact" id="pc-search" placeholder="Search project or person…" oninput="renderPCTable()" style="min-width:180px">
-        <span class="toolbar-label" style="margin-left:8px">Project</span>
-        <select class="sel-compact" id="pc-filter-project" onchange="renderPCTable()"><option value="">All projects</option></select>
-        <span class="toolbar-label" style="margin-left:8px">Person</span>
-        <select class="sel-compact" id="pc-filter-person" onchange="renderPCTable()"><option value="">All people</option></select>
-        <span class="toolbar-label" style="margin-left:8px">Sort</span>
-        <select class="sel-compact" id="pc-sort" onchange="renderPCTable()">
-          <option value="project">Project</option>
-          <option value="person">Person</option>
-          <option value="hours">Hours ↓</option>
-          <option value="date">Date ↓</option>
-        </select>
-        <span class="toolbar-label" style="margin-left:8px">Rate £/hr</span>
-        <input type="number" id="pc-rate-input" value="40" min="1" step="1" class="sel-compact" style="width:64px;text-align:right" onchange="setPCRate(this.value)">
-        <button class="btn btn-primary" style="margin-left:4px" onclick="openPCForm()">+ Log hours</button>
+        <div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="pc-search" placeholder="Search project or person…" oninput="renderPCTable()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:200px"></div>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openPCForm()">+ Log hours</button>
       </div>
 
       <!-- Table -->
@@ -947,14 +934,13 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
         <div class="card-scroll">
           <table>
             <thead><tr>
-              <th>Code</th>
-              <th>Project</th>
-              <th>Person</th>
+              <th style="width:52px">Code</th>
+              <th>Project / Person</th>
               <th>Date</th>
               <th class="num">Hours</th>
               <th class="num">Cost</th>
               <th class="num">% CV</th>
-              <th></th>
+              <th style="text-align:right"></th>
             </tr></thead>
             <tbody id="pc-body"></tbody>
           </table>
@@ -1124,7 +1110,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 </div>
 <script>
 // ╔═══════════════════════════════════════════════════════════════════════════╗
-// ║  MFB STUDIO V10.2 — REBUILT DB\n// build-20260629-2000                                               ║
+// ║  MFB STUDIO V10.3 — REBUILT DB\n// build-20260629-2100                                               ║
 // ║  Sections: CONFIG · UTILS · AUTH · CACHE · DATA · SHELL · TABS           ║
 // ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -1393,7 +1379,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-const BUILD = { version: '10.2', date: '2026-06-24', label: 'MFB Studio' };
+const BUILD = { version: '10.3', date: '2026-06-24', label: 'MFB Studio' };
 console.log(`%c ${BUILD.label} %c v${BUILD.version} · ${BUILD.date} `, 'background:#2563EB;color:#fff;font-weight:600;padding:2px 0;border-radius:4px 0 0 4px','background:#1C1B18;color:#fff;padding:2px 0;border-radius:0 4px 4px 0');
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
@@ -4506,80 +4492,103 @@ function renderPreConstruction() {
 
 function renderPCTable() {
   const search = (document.getElementById("pc-search") || { value: "" }).value.trim().toLowerCase();
-  const filterProj = (document.getElementById("pc-filter-project") || { value: "" }).value;
-  const filterPerson = (document.getElementById("pc-filter-person") || { value: "" }).value;
-  const sortBy = (document.getElementById("pc-sort") || { value: "project" }).value;
 
   let rows = [...state.preconstruction];
-  if (filterProj) rows = rows.filter((r) => r.projectCode === filterProj);
-  if (filterPerson) rows = rows.filter((r) => r.name === filterPerson);
-  if (search)
-    rows = rows.filter(
-      (r) =>
-        r.projectCode.toLowerCase().includes(search) ||
-        r.name.toLowerCase().includes(search) ||
-        (state.projects.find((p) => p.code === r.projectCode) || { name: "" }).name.toLowerCase().includes(search),
+  if (search) {
+    rows = rows.filter((r) =>
+      (r.projectCode||"").toLowerCase().includes(search) ||
+      (r.name||"").toLowerCase().includes(search) ||
+      (state._projectByCode[r.projectCode]?.name||"").toLowerCase().includes(search)
     );
+  }
 
-  if (sortBy === "person")
-    rows.sort((a, b) => a.name.localeCompare(b.name) || a.projectCode.localeCompare(b.projectCode));
-  else if (sortBy === "hours") rows.sort((a, b) => b.hours - a.hours);
-  else if (sortBy === "date") rows.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  else rows.sort((a, b) => a.projectCode.localeCompare(b.projectCode) || a.name.localeCompare(b.name));
+  // Sort Z-A by project code (newest first), then by person within project
+  rows.sort((a, b) => b.projectCode.localeCompare(a.projectCode) || a.name.localeCompare(b.name));
 
   const tbody = document.getElementById("pc-body");
   if (!tbody) return;
+  tbody.innerHTML = "";
+
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">${state.preconstruction.length ? "No entries match the current filters." : 'No hours logged yet — click "+ Log hours" to get started.'}</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">${state.preconstruction.length ? "No entries match." : 'No hours logged yet — click "+ Log hours" to get started.'}</div></td></tr>`;
     return;
   }
 
-  let html = "";
-  let lastGroup = "";
-  let groupHrs = 0;
-  let groupRows = [];
-  const groupKey = (r) => (sortBy === "person" ? r.name : r.projectCode);
-
-  const flushGroup = () => {
-    if (!groupRows.length) return;
-    html += groupRows.join("");
-    html += `<tr style="background:var(--surface2)"><td colspan="4" style="font-size:11px;color:var(--text3);padding:4px 10px">subtotal</td><td class="num" style="font-size:12px;font-weight:600;color:var(--text1)">${groupHrs.toFixed(1)}h</td><td class="num" style="font-size:12px;font-weight:600;color:var(--text1)">${fmtGBP(Math.round(groupHrs * PC_RATE))}</td><td colspan="2"></td></tr>`;
-    groupRows = [];
-    groupHrs = 0;
-  };
-
+  // Group by project code
+  const grouped = {};
   rows.forEach((r) => {
-    const key = groupKey(r);
-    if (key !== lastGroup) {
-      flushGroup();
-      lastGroup = key;
-    }
-    const proj = state.projects.find((p) => p.code === r.projectCode);
-    const cv = proj && proj.cv ? parseFloat(proj.cv) : null;
-    const cost = r.hours * PC_RATE;
-    const pctCV = cv && cost ? ((cost / cv) * 100).toFixed(2) + "%" : "–";
-    groupRows.push(`<tr>
-      <td><span class="code-chip">${esc(r.projectCode)}</span></td>
-      <td style="font-size:13px">${esc(proj ? proj.name : r.projectCode)}</td>
-      <td style="font-size:12px;color:var(--text2)">${esc(r.name)}</td>
-      <td style="font-size:12px;color:var(--text3)">${r.date ? new Date(r.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" }) : "–"}</td>
-      <td class="num">${r.hours.toFixed(1)}</td>
-      <td class="num">${fmtGBP(Math.round(cost))}</td>
-      <td class="num" style="font-size:12px;color:var(--text3)">${pctCV}</td>
-      <td><button class="btn btn-sm" onclick="editPC('${esc(r.name)}','${esc(r.projectCode)}')">Edit</button></td>
-    </tr>`);
-    groupHrs += r.hours;
+    if (!grouped[r.projectCode]) grouped[r.projectCode] = [];
+    grouped[r.projectCode].push(r);
   });
-  flushGroup();
+  const projectCodes = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
 
-  // Grand total
-  const totalHrs = rows.reduce((s, r) => s + r.hours, 0);
-  html += `<tr class="total-row"><td colspan="4">Total</td><td class="num" style="font-weight:700">${totalHrs.toFixed(1)}h</td><td class="num" style="font-weight:700">${fmtGBP(Math.round(totalHrs * PC_RATE))}</td><td colspan="2"></td></tr>`;
-  tbody.innerHTML = html;
+  let totalHrs = 0, totalCost = 0;
+
+  projectCodes.forEach((code) => {
+    const proj = state._projectByCode[code];
+    const projRows = grouped[code];
+    const cv = proj ? parseFloat(proj.cv)||0 : 0;
+    const projHrs = projRows.reduce((s, r) => s + r.hours, 0);
+    // Use per-person rates for project total
+    const projCost = projRows.reduce((s, r) => s + r.hours * preconRate(r.name), 0);
+    const pctCV = cv && projCost ? ((projCost / cv) * 100).toFixed(2) + "%" : "–";
+    totalHrs += projHrs;
+    totalCost += projCost;
+
+    // Project header row
+    const htr = document.createElement("tr");
+    htr.style.cssText = "background:var(--surface2);border-top:2px solid var(--border)";
+    htr.innerHTML =
+      `<td style="padding:9px 12px"><span class="code-chip">${esc(code)}</span></td>` +
+      `<td style="padding:9px 8px;font-weight:600;font-size:13px">${esc(proj ? proj.name : code)}</td>` +
+      `<td style="padding:9px 8px;font-size:12px;color:var(--text3)">${projRows.length} entr${projRows.length!==1?"ies":"y"}</td>` +
+      `<td class="num" style="padding:9px 8px;font-weight:700">${projHrs.toFixed(1)}h</td>` +
+      `<td class="num" style="padding:9px 8px;font-weight:700">${fmtGBP(Math.round(projCost))}</td>` +
+      `<td class="num" style="padding:9px 8px;font-size:12px;color:var(--text3)">${pctCV}</td>` +
+      `<td style="padding:9px 8px;text-align:right"><button class="btn btn-sm" onclick="openPCFormForProject('${esc(code)}')">+ Log</button></td>`;
+    tbody.appendChild(htr);
+
+    // Detail rows per person
+    projRows.forEach((r) => {
+      const rate = preconRate(r.name);
+      const cost = r.hours * rate;
+      const dateStr = r.date ? new Date(r.date).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"2-digit" }) : "–";
+      const rateTag = `<span style="font-size:10px;color:var(--text3);margin-left:4px">£${rate}/hr</span>`;
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        `<td></td>` +
+        `<td style="padding:6px 8px 6px 24px;font-size:12px;color:var(--text2)">${esc(r.name)}${rateTag}</td>` +
+        `<td style="padding:6px 8px;font-size:12px;color:var(--text3)">${dateStr}</td>` +
+        `<td class="num" style="padding:6px 8px">${r.hours.toFixed(1)}h</td>` +
+        `<td class="num" style="padding:6px 8px">${fmtGBP(Math.round(cost))}</td>` +
+        `<td class="num" style="padding:6px 8px;font-size:12px;color:var(--text3)"></td>` +
+        `<td style="padding:6px 8px;text-align:right"><button class="btn btn-sm" onclick="editPC('${esc(r.name)}','${esc(r.projectCode)}')">Edit</button></td>`;
+      tbody.appendChild(tr);
+    });
+  });
+
+  // Grand total row
+  const tr2 = document.createElement("tr");
+  tr2.className = "total-row";
+  tr2.innerHTML =
+    `<td colspan="3">Total (${rows.length} entries across ${projectCodes.length} projects)</td>` +
+    `<td class="num" style="font-weight:700">${totalHrs.toFixed(1)}h</td>` +
+    `<td class="num" style="font-weight:700">${fmtGBP(Math.round(totalCost))}</td>` +
+    `<td colspan="2"></td>`;
+  tbody.appendChild(tr2);
 }
 
 function openPCForm() {
   document.getElementById("pc-form").style.display = "flex";
+  // Reset project selector
+  const sel = document.getElementById("pc-proj-sel");
+  if (sel) sel.value = "";
+  updatePCPersonRows();
+}
+function openPCFormForProject(code) {
+  document.getElementById("pc-form").style.display = "flex";
+  const sel = document.getElementById("pc-proj-sel");
+  if (sel) sel.value = code;
   updatePCPersonRows();
 }
 
