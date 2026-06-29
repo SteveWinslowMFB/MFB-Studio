@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFB Studio V9.9 - Rebuilt DB</title>
+<title>MFB Studio V10.0 - Rebuilt DB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
@@ -599,20 +599,25 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
     <div id="tab-burn" class="tab-content">
       <div class="page-header">
         <div><h1>Fee Burn</h1><p>Internal cost vs. quoted fee — all time</p></div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <div class="toggle-group" style="display:flex;border-radius:8px;overflow:hidden;border:1px solid var(--border2);height:33px">
-            <button class="toggle-btn active" id="burn-toggle-design" onclick="setBurnMode('design')" style="height:33px;border-radius:0">Design only</button>
-            <button class="toggle-btn" id="burn-toggle-con" onclick="setBurnMode('con')" style="height:33px;border-radius:0">+ Consultant burn</button>
-          </div>
-          <select class="sel-compact" id="burn-show" onchange="renderBurn()"><option value="all">All C projects</option><option value="active">Active only</option></select>
-          <select class="sel-compact" id="burn-sort" onchange="renderBurn()"><option value="fee" selected="">Fee remaining ↑</option><option value="code">Code Z–A</option><option value="name">Name A–Z</option></select>
+      </div>
+      <div class="toolbar">
+        <div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="burn-search" placeholder="Search code or name…" oninput="renderBurn()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="burn-toggle-design" onclick="setBurnMode('design')">Design only</button>
+          <button class="toggle-btn" id="burn-toggle-con" onclick="setBurnMode('con')">+ Consultant burn</button>
         </div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="burn-show-active" onclick="setBurnShow('active')">Active</button>
+          <button class="toggle-btn" id="burn-show-all" onclick="setBurnShow('all')">All</button>
+        </div>
+        <span class="toolbar-label">Sort</span>
+        <select class="sel-compact" id="burn-sort" onchange="renderBurn()"><option value="fee" selected="">Fee remaining ↑</option><option value="code">Code Z–A</option><option value="name">Name A–Z</option></select>
       </div>
       <div class="metrics" id="burn-metrics"></div>
       <div class="card"><div class="card-scroll"><table class="burn-table">
         <thead>
           <tr id="burn-head-designers"></tr>
-          <tr><th>Code</th><th>Project</th><th class="num">Total fee</th><th class="num">Qtrs</th><th class="num">Hrs</th><th class="num" id="burn-th-cost">Int. Cost</th><th class="num" id="burn-th-conq" style="display:none">Con. quoted</th><th class="num" id="burn-th-cona" style="display:none">Con. actual</th><th class="num" id="burn-th-conv" style="display:none">Con. var.</th><th class="num">Remaining</th><th style="min-width:150px">% used</th><th>Status</th><th>Notes</th></tr>
+          <tr><th>Code</th><th>Project</th><th class="num">Total fee</th><th class="num">Qtrs</th><th class="num">Hrs</th><th class="num" id="burn-th-cost">Int. Cost</th><th class="num" id="burn-th-conq" style="display:none">Con. quoted</th><th class="num" id="burn-th-cona" style="display:none">Con. actual</th><th class="num" id="burn-th-conv" style="display:none">Con. var.</th><th class="num">Remaining</th><th style="min-width:150px">% used</th><th>Completion</th><th>Status</th><th>Notes</th></tr>
         </thead>
         <tbody id="burn-body"></tbody>
       </table></div></div>
@@ -627,6 +632,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
           <select class="sel-compact" id="sa-year-filter" onchange="renderSalesAnalysis()"><option value="all">All years</option></select>
           <span class="toolbar-label">Show</span>
           <select class="sel-compact" id="sa-show" onchange="renderSalesAnalysis()"><option value="all">All prospects</option><option value="unconverted">Not won (sunk)</option><option value="converted">Won only</option></select>
+          <div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="sa-search" placeholder="Search code or name…" oninput="renderSalesAnalysis()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
           <select class="sel-compact" id="sa-sort" onchange="renderSalesAnalysis()"><option value="cost">Cost ↓</option><option value="code">Code Z–A</option><option value="name">Name A–Z</option><option value="converted">Converted first</option></select>
         </div>
       </div>
@@ -667,20 +673,22 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
     <div id="tab-feereality" class="tab-content">
       <div class="page-header">
         <div><h1>Fee Reality</h1><p>What we <em>should</em> have charged to break even on internal design cost — MFB only, no consultants</p></div>
-        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
-          <div class="toggle-group">
-            <button class="toggle-btn active" id="fr-toggle-live" onclick="setFeeRealityMode('live')">Live cost only</button>
-            <button class="toggle-btn" id="fr-toggle-con" onclick="setFeeRealityMode('con')">+ Consultant variance</button>
-            <button class="toggle-btn" id="fr-toggle-inc" onclick="setFeeRealityMode('inc')">+ Sales Design Cost</button>
-            <button class="toggle-btn" id="fr-toggle-precon" onclick="setFeeRealityMode('precon')">+ PreCon</button>
-          </div>
-          <select class="sel-compact" id="fr-sort" onchange="renderFeeReality()">
+      </div>
+      <div class="toolbar">
+        <div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="fr-search" placeholder="Search code or name…" oninput="renderFeeReality()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="fr-toggle-live" onclick="setFeeRealityMode('live')">Live cost only</button>
+          <button class="toggle-btn" id="fr-toggle-con" onclick="setFeeRealityMode('con')">+ Consultant variance</button>
+          <button class="toggle-btn" id="fr-toggle-inc" onclick="setFeeRealityMode('inc')">+ Sales Design Cost</button>
+          <button class="toggle-btn" id="fr-toggle-precon" onclick="setFeeRealityMode('precon')">+ PreCon</button>
+        </div>
+        <span class="toolbar-label">Sort</span>
+        <select class="sel-compact" id="fr-sort" onchange="renderFeeReality()">
           <option value="gap">Gap (worst first)</option>
           <option value="code">Code Z–A</option>
           <option value="name">Name A–Z</option>
           <option value="implied">Implied % ↓</option>
         </select>
-        </div>
       </div>
       <div class="metrics" id="fr-metrics"></div>
 
@@ -723,7 +731,13 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
         <div><h1>Project Info</h1><p>Site, client and construction data</p></div>
         <button class="btn btn-primary" onclick="showAddProjectModal()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 1v11M1 6.5h11"></path></svg>Add project</button>
       </div>
-      <div class="toolbar"><span class="toolbar-label">Sort</span>
+      <div class="toolbar"><div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="proj-search" placeholder="Search code or name…" oninput="renderProjectList()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
+        <div class="toggle-group" style="margin-left:4px">
+          <button class="toggle-btn active" id="proj-type-all" onclick="setProjType('all')">All</button>
+          <button class="toggle-btn" id="proj-type-c" onclick="setProjType('C')">C</button>
+          <button class="toggle-btn" id="proj-type-p" onclick="setProjType('P')">P</button>
+        </div>
+        <span class="toolbar-label" style="margin-left:8px">Sort</span>
         <select class="sel-compact" id="proj-sort" onchange="renderProjectList()"><option value="code">Code Z–A</option><option value="name">Name A–Z</option><option value="cv">CV ↓</option><option value="gifa">GIFA ↓</option><option value="lastentry">Last Entry ↑</option></select>
         <span class="toolbar-label" style="margin-left:8px">Show</span>
         <div class="toggle-group">
@@ -750,6 +764,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
           <button class="toggle-btn active" id="mfb-status-active" onclick="setMFBStatus('active')">Active</button>
           <button class="toggle-btn" id="mfb-status-all" onclick="setMFBStatus('all')">All</button>
         </div>
+        <div style="position:relative;display:flex;align-items:center;margin-left:8px"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="mfb-search" placeholder="Search code or name…" oninput="renderMFBFees()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
         <span class="toolbar-label" style="margin-left:8px">Sort</span>
         <select class="sel-compact" id="mfb-sort" onchange="renderMFBFees()"><option value="code">Code Z–A</option><option value="name">Name A–Z</option><option value="arch">Arch fee ↓</option><option value="total">Total fee ↓</option><option value="pct">% CV ↓</option></select>
       </div>
@@ -777,13 +792,13 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
         <div style="display:flex;gap:8px"><button class="btn btn-primary" id="con-save-btn" onclick="addConsultant()">Save consultant</button><button class="btn" onclick="cancelConEdit()">Cancel</button></div>
       </div>
       <div class="toolbar">
-        <span class="toolbar-label">Project</span><select class="sel-compact" id="con-filter-project" onchange="renderConsultants()"><option value="all">All projects</option></select>
+        <div style="position:relative;display:flex;align-items:center"><svg style="position:absolute;left:7px;pointer-events:none;opacity:.4" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input type="text" id="con-search" placeholder="Search project…" oninput="renderConsultants()" autocomplete="off" style="padding:4px 8px 4px 24px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r-md);background:var(--surface);color:var(--text1);height:30px;min-width:180px"></div>
         <span class="toolbar-label">Type</span><select class="sel-compact" id="con-filter-type" onchange="renderConsultants()"><option value="all">All types</option></select>
         <span class="toolbar-label">Sort</span><select class="sel-compact" id="con-sort" onchange="renderConsultants()"><option value="project">Project A–Z</option><option value="type">Type A–Z</option><option value="fee">Fee ↓</option><option value="pct">% CV ↓</option></select>
       </div>
       <div class="metrics" id="con-metrics"></div>
       <div class="card"><div class="card-scroll"><table><thead><tr>
-        <th>Code</th><th>Project</th><th>Type</th><th>Firm</th><th class="num">Quoted fee</th><th class="num">Actual cost</th><th class="num">Variance</th><th class="num">% CV</th><th>vs MFB fee</th><th>Notes</th><th></th>
+        <th style="width:52px">Code</th><th>Project / Firm</th><th>Type</th><th>Notes</th><th class="num">CSA fee</th><th class="num">Actual</th><th class="num">Variance</th><th style="text-align:right"></th>
       </tr></thead><tbody id="con-body"></tbody></table></div></div>
     </div>
 
@@ -829,7 +844,13 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
     <!-- RESOURCE LOAD -->
     <div id="tab-resource" class="tab-content">
       <div class="page-header"><div><h1>Resource Load</h1><p>Remaining work implied by fee balance</p></div></div>
-      <div id="resource-summary-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px"></div>
+      <div id="resource-summary-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px"></div>
+      <div class="toolbar" style="margin-bottom:16px">
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="resource-show-active" onclick="_showArchived=false;renderResource()">Active only</button>
+          <button class="toggle-btn" id="resource-show-all" onclick="_showArchived=true;renderResource()">Show all</button>
+        </div>
+      </div>
       <div class="card">
         <div class="card-header"><h2>Project detail</h2></div>
         <div class="card-scroll">
@@ -842,6 +863,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
               <th class="num">Implied qtrs</th>
               <th class="num">Implied hrs</th>
               <th style="min-width:140px">Load indicator</th>
+              <th>Completion</th>
               <th></th>
             </tr></thead>
             <tbody id="resource-body"></tbody>
@@ -1080,9 +1102,10 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
       <div class="field"><label>Construction value (£)</label><input type="number" id="pf-cv" placeholder="500000" min="0" oninput="updateFeePreview()"></div>
       <div class="field"><label>GIFA (m²)</label><input type="number" id="pf-gifa" placeholder="e.g. 1250" min="0"></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:8px">
+    <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin-bottom:8px">
       <div class="field"><label>Notes</label><input type="text" id="pf-notes" placeholder="Optional"></div>
       <div class="field"><label>Address <span style="text-transform:none;font-weight:400;color:var(--text3)">(for map — optional)</span></label><input type="text" id="pf-address" placeholder="e.g. 1 Colonial Way, Watford WD24 4YR"></div>
+      <div class="field"><label>Design completion <span style="text-transform:none;font-weight:400;color:var(--text3)">(target)</span></label><input type="date" id="pf-completion"></div>
     </div>
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:8px;margin-top:6px">MFB fees</div>
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px">
@@ -1101,7 +1124,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 </div>
 <script>
 // ╔═══════════════════════════════════════════════════════════════════════════╗
-// ║  MFB STUDIO V9.9 — REBUILT DB\n// build-20260624-1600                                               ║
+// ║  MFB STUDIO V9.9.1 — REBUILT DB\n// build-20260629-1000                                               ║
 // ║  Sections: CONFIG · UTILS · AUTH · CACHE · DATA · SHELL · TABS           ║
 // ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -1370,7 +1393,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-const BUILD = { version: '9.9', date: '2026-06-24', label: 'MFB Studio' };
+const BUILD = { version: '10.0', date: '2026-06-24', label: 'MFB Studio' };
 console.log(`%c ${BUILD.label} %c v${BUILD.version} · ${BUILD.date} `, 'background:#2563EB;color:#fff;font-weight:600;padding:2px 0;border-radius:4px 0 0 4px','background:#1C1B18;color:#fff;padding:2px 0;border-radius:0 4px 4px 0');
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
@@ -1557,6 +1580,7 @@ async function apiCall(params) {
         status_date: data.status_date || null,
         status_note: data.status_note || null,
         converted_to: data.converted_to || null,
+        design_completion: data.design_completion || null,
       };
       if (data.id) {
         const { error } = await sb_client.from("projects").update(row).eq("id", data.id);
@@ -1751,6 +1775,7 @@ function applyData(data) {
     statusDate: r.status_date || "",
     statusNote: r.status_note || "",
     convertedTo: r.converted_to || "",
+    designCompletion: r.design_completion || "",
   }));
   // Build lookup: project id → name (for entry resolution)
   state._projectById = {};
@@ -1768,9 +1793,18 @@ function applyData(data) {
     state._designerByName[d.name] = d;
   });
   // Build lookup: name → project object
+  // When P and C share the same name (after conversion), prefer the C-project
   state._projectByName = {};
   state.projects.forEach((p) => {
-    state._projectByName[p.name] = p;
+    const existing = state._projectByName[p.name];
+    if (!existing) {
+      state._projectByName[p.name] = p;
+    } else {
+      // Prefer C-project over P-project for display purposes
+      if (/^C\d/i.test(p.code || "") && /^P\d/i.test(existing.code || "")) {
+        state._projectByName[p.name] = p;
+      }
+    }
   });
   // Build lookup: code → project object
   state._projectByCode = {};
@@ -1802,20 +1836,20 @@ function applyData(data) {
     };
   });
 
-  // Consultants — project name resolved from joined project
+  // Consultants — keyed by projectCode (canonical), name kept for display only
   state.consultants = (data.consultants || [])
     .map((r) => ({
       id: r.id,
       projectId: r.project_id,
-      project: r.project?.name || "",
       projectCode: r.project?.code || "",
+      projectName: r.project?.name || "",
       type: r.type || "",
       firm: r.firm || "",
       fee: r.fee != null ? parseFloat(r.fee) : null,
       actualCost: r.actual_cost != null ? parseFloat(r.actual_cost) : null,
       notes: r.notes || "",
     }))
-    .filter((r) => r.project);
+    .filter((r) => r.projectCode);
 
   // Preconstruction — resolved from joined project + designer/staff
   state.preconstruction = (data.preconstruction || [])
@@ -2411,6 +2445,11 @@ function calcProjectCost(proj) {
 }
 
 let burnMode = "design";
+function setBurnShow(s) {
+  document.getElementById("burn-show-active").classList.toggle("active", s === "active");
+  document.getElementById("burn-show-all").classList.toggle("active", s === "all");
+  renderBurn();
+}
 function setBurnMode(m) {
   burnMode = m;
   ["design", "con"].forEach((k) => {
@@ -2439,7 +2478,7 @@ function renderBurn() {
   const _burnDesigners = activeDesignersForMonth(state.year, state.month);
   const headRow = document.getElementById("burn-head-designers");
   const showDesigners = burnMode !== "con";
-  const conColSpan = burnMode === "con" ? 11 : 8;
+  const conColSpan = burnMode === "con" ? 12 : 9;
   headRow.innerHTML = `<th colspan="2" style="background:var(--surface2);border-bottom:none"></th><th colspan="${conColSpan}" style="background:var(--surface2);font-size:10px;color:var(--text3);font-weight:400;border-bottom:none;text-align:right">project totals →</th>${showDesigners ? _burnDesigners.map((d) => `<th class="num" style="background:var(--surface2)">${esc(d)}</th>`).join("") : ""}`;
   const secondRow = tbody.closest("table").querySelector("thead tr:last-child");
   [...secondRow.querySelectorAll(".d-col")].forEach((el) => el.remove());
@@ -2453,10 +2492,12 @@ function renderBurn() {
     });
   }
   const sortBy = (document.getElementById("burn-sort") || { value: "fee" }).value;
-  const burnShow = (document.getElementById("burn-show") || { value: "all" }).value;
+  const burnShow = (document.getElementById("burn-show-active")||{}).classList?.contains("active") ? "active" : "all";
+  const burnQ = ((document.getElementById("burn-search")||{}).value||"").toLowerCase().trim();
   const cProjects = state.projects
     .filter((p) => p.code && /^C\d/.test(p.code))
-    .filter((p) => (burnShow === "active" ? !p.status || p.status === "active" : true))
+    .filter((p) => burnQ ? true : (burnShow === "active" ? !p.status || p.status === "active" : true))
+    .filter((p) => !burnQ || (p.code||"").toLowerCase().includes(burnQ) || (p.name||"").toLowerCase().includes(burnQ))
     .sort((a, b) => {
       if (sortBy === "code") return (b.code || "").localeCompare(a.code || "");
       if (sortBy === "name") return (a.name || "").localeCompare(b.name || "");
@@ -2474,7 +2515,7 @@ function renderBurn() {
     const { qtrs, hrs, cost, totalFee } = calcProjectCost(proj);
     const dQtrs = _burnDesigners.map((d) => calcDesignerProjectQuarters(d, proj.code));
     // Consultant burn
-    const pCons = state.consultants.filter((con) => con.project === proj.name);
+    const pCons = state.consultants.filter((con) => con.projectCode === proj.code);
     const conQuoted = pCons.reduce((s, con) => s + (con.fee || 0), 0);
     const conActualSet = pCons.some((con) => con.actualCost !== null && con.actualCost !== undefined);
     const conActual = conActualSet
@@ -2502,7 +2543,7 @@ function renderBurn() {
         ? `<td class="num" style="font-size:12px;color:var(--text3)">${conQuoted > 0 ? fmtGBP(conQuoted) : "–"}</td><td class="num" style="font-size:12px">${conActual !== null ? fmtGBP(conActual) : '<span style="color:var(--text3)">not set</span>'}</td><td class="num" style="font-size:12px;font-weight:600;color:${conVar !== null && conVar > 0 ? "var(--red)" : conVar !== null && conVar < 0 ? "var(--green)" : "var(--text3)"}">${conVar !== null ? (conVar > 0 ? "+" : "") + fmtGBP(conVar) : "–"}</td>`
         : "";
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td><span class="code-chip">${esc(proj.code)}</span></td><td style="font-weight:500">${esc(proj.name)}</td><td class="num">${totalFee > 0 ? fmtGBP(totalFee) : "–"}</td><td class="num">${qtrs || "–"}</td><td class="num">${qtrs ? hrs.toFixed(1) : "–"}</td><td class="num">${fmtGBP(cost)}</td>${conCells}<td class="num" style="color:${rem < 0 ? "var(--red)" : "inherit"};font-weight:600">${totalFee > 0 ? fmtGBP(rem) : "–"}</td><td style="min-width:150px">${pctUsed !== null ? progressBar(pctUsed) : "–"}</td><td>${statusBadge(proj)}</td><td style="font-size:12px;color:var(--text3)">${esc(proj.notes)}</td>${showDesigners ? dQtrs.map((q) => `<td class="num" style="font-size:12px;color:var(--text2)">${q || "–"}</td>`).join("") : ""}`;
+    tr.innerHTML = `<td><span class="code-chip">${esc(proj.code)}</span></td><td style="font-weight:500">${esc(proj.name)}</td><td class="num">${totalFee > 0 ? fmtGBP(totalFee) : "–"}</td><td class="num">${qtrs || "–"}</td><td class="num">${qtrs ? hrs.toFixed(1) : "–"}</td><td class="num">${fmtGBP(cost)}</td>${conCells}<td class="num" style="color:${rem < 0 ? "var(--red)" : "inherit"};font-weight:600">${totalFee > 0 ? fmtGBP(rem) : "–"}</td><td style="min-width:150px">${pctUsed !== null ? progressBar(pctUsed) : "–"}</td><td style="white-space:nowrap">${(() => { if (!proj.designCompletion) return '<span style="color:var(--text3)">–</span>'; const dc=new Date(proj.designCompletion),dL=Math.round((dc-new Date())/86400000),fmt=dc.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"2-digit"}),col=dL<0?"var(--red)":dL<30?"var(--red)":dL<90?"var(--amber)":"var(--green)"; return `<span style="color:${col};font-weight:500">${fmt}</span>${dL<0?' <span style="font-size:10px;color:var(--red)">overdue</span>':dL<30?` <span style="font-size:10px;color:var(--amber)">${dL}d</span>`:""}`;})()}</td><td>${statusBadge(proj)}</td><td style="font-size:12px;color:var(--text3)">${esc(proj.notes)}</td>${showDesigners ? dQtrs.map((q) => `<td class="num" style="font-size:12px;color:var(--text2)">${q || "–"}</td>`).join("") : ""}`;
     tbody.appendChild(tr);
   });
   if (cProjects.length) {
@@ -2915,7 +2956,7 @@ function renderFeeReality() {
   state.consultants.forEach((con) => {
     if (con.actualCost === null || con.actualCost === undefined) return;
     const delta = (con.actualCost || 0) - (con.fee || 0);
-    conVarByProject[con.project] = (conVarByProject[con.project] || 0) + delta;
+    conVarByProject[con.projectCode] = (conVarByProject[con.projectCode] || 0) + delta;
   });
 
   // Build a lookup: P-project number → total sales quarters cost
@@ -2933,8 +2974,10 @@ function renderFeeReality() {
     });
 
   // Build rows — C projects only, with a CV set
+  const frQ = ((document.getElementById("fr-search")||{}).value||"").toLowerCase().trim();
   const rows = state.projects
     .filter((p) => p.code && /^C\d/.test(p.code) && (parseFloat(p.cv) || 0) > 0)
+    .filter((p) => !frQ || (p.code||"").toLowerCase().includes(frQ) || (p.name||"").toLowerCase().includes(frQ))
     .map((p) => {
       const cv = parseFloat(p.cv) || 0;
       const arch = parseFloat(p.arch) || 0,
@@ -2949,7 +2992,7 @@ function renderFeeReality() {
         frMode === "precon" || frMode === "inc" ? state.preconstruction.filter((r) => r.projectCode === "P" + num) : [];
       const preconCost = preconEntries.reduce((s, r) => s + r.hours * preconRate(r.staffName || r.name || ""), 0);
       // Consultant totals for this project
-      const pCons = state.consultants.filter((con) => con.project === p.name);
+      const pCons = state.consultants.filter((con) => con.projectCode === p.code);
       // Each cost component calculated independently
       const conHasActual = pCons.some((con) => con.actualCost !== null && con.actualCost !== undefined);
       const conActualTotal = pCons.reduce(
@@ -3164,6 +3207,12 @@ function renderFeeReality() {
     .join("");
 }
 
+function _conProjOptions(q) {
+  return state.projects
+    .filter((p) => p.code && /^C\d/.test(p.code))
+    .filter((p) => !q || (p.code||"").toLowerCase().includes(q) || (p.name||"").toLowerCase().includes(q))
+    .sort((a, b) => (b.code||"").localeCompare(a.code||""));
+}
 function populateConProjectDropdown() {
   const sel = document.getElementById("con-project");
   if (!sel) return;
@@ -3171,11 +3220,13 @@ function populateConProjectDropdown() {
   sel.innerHTML = '<option value="">— select project —</option>';
   state.projects
     .filter((p) => p.code && /^C\d/.test(p.code))
+    .sort((a, b) => (b.code||"").localeCompare(a.code||""))
     .forEach((p) => {
       const o = document.createElement("option");
-      o.value = p.name;
-      o.textContent = projLabel(p.name);
-      if (p.name === current) o.selected = true;
+      o.value = p.id;  // use DB id as value — unambiguous even when P/C share a name
+      o.dataset.name = p.name;
+      o.textContent = `${p.code} — ${p.name}`;
+      if (p.id === current) o.selected = true;
       sel.appendChild(o);
     });
 }
@@ -3207,6 +3258,21 @@ function toggleConForm() {
     populateConTypeDropdown();
   }
 }
+function addConsultantForProject(code) {
+  // Open the add form pre-filled with the project
+  const f = document.getElementById("con-add-form");
+  f.style.display = "block";
+  populateConProjectDropdown();
+  populateConTypeDropdown();
+  // Select this project in the dropdown
+  const sel = document.getElementById("con-project");
+  if (sel) {
+    const opt = [...sel.options].find(o => o.value === state._projectByCode[code]?.id);
+    if (opt) sel.value = opt.value;
+  }
+  document.getElementById("con-form-title").textContent = "Add consultant — " + code;
+  f.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 let conEditIdx = null;
 function editConsultant(idx) {
   const r = state.consultants[idx];
@@ -3216,7 +3282,12 @@ function editConsultant(idx) {
   f.style.display = "block";
   populateConProjectDropdown();
   populateConTypeDropdown();
-  document.getElementById("con-project").value = r.project || "";
+  // Select by projectId — unambiguous regardless of shared names
+  const cpSel = document.getElementById("con-project");
+  if (cpSel) {
+    const matchOpt = [...cpSel.options].find(o => o.value === r.projectId);
+    if (matchOpt) cpSel.value = matchOpt.value;
+  }
   document.getElementById("con-type").value = r.type || getConTypes()[0] || "";
   document.getElementById("con-firm").value = r.firm || "";
   document.getElementById("con-fee").value = r.fee !== null && r.fee !== undefined ? r.fee : "";
@@ -3233,13 +3304,16 @@ function cancelConEdit() {
     if (el) el.value = "";
   });
   const s = document.getElementById("con-project");
-  if (s) s.value = "";
-  document.getElementById("con-form-title").textContent = "Add consultant";
+  if (s) s.value = "";  // clears to default "— select project —"
+  document.getElementById("con-form-title").textContent = "Add consultant";  // reset title
   document.getElementById("con-save-btn").textContent = "Save consultant";
   document.getElementById("con-add-form").style.display = "none";
 }
 async function addConsultant() {
-  const project = document.getElementById("con-project").value;
+  const projSel = document.getElementById("con-project");
+  const projId = projSel.value;
+  const projOpt = projSel.options[projSel.selectedIndex];
+  const project = projOpt ? (projOpt.dataset.name || "") : "";
   const type = document.getElementById("con-type").value;
   const firm = document.getElementById("con-firm").value.trim();
   const feeRaw = document.getElementById("con-fee").value;
@@ -3266,12 +3340,12 @@ async function addConsultant() {
       existing.fee = fee;
       existing.actualCost = actualCost;
       existing.notes = notes;
-      const proj = state._projectByName[project];
+      const proj = state._projectById[projId] || state._projectByName[project];
       await apiCall({
         action: "saveConsultant",
         data: JSON.stringify({
           id: existing.id,
-          project_id: proj?.id || existing.projectId,
+          project_id: projId || proj?.id || existing.projectId,
           type,
           firm,
           fee,
@@ -3282,24 +3356,22 @@ async function addConsultant() {
       setSyncStatus("ok", "Updated");
       conEditIdx = null;
     } else {
-      const id = project + "|" + type + "|" + (firm || "ext") + "|" + Date.now();
-      const proj3 = state._projectByName[project];
+      const proj3 = state._projectById[projId];
       state.consultants.push({
-        id,
-        projectId: proj3?.id,
-        project,
+        id: "tmp-" + Date.now(),
+        projectId: projId,
         projectCode: proj3?.code || "",
+        projectName: proj3?.name || project,
         type,
         firm,
         fee,
         actualCost,
         notes,
       });
-      const proj2 = state._projectByName[project];
       await apiCall({
         action: "saveConsultant",
         data: JSON.stringify({
-          project_id: proj2?.id,
+          project_id: projId,
           type,
           firm,
           fee,
@@ -3341,103 +3413,139 @@ async function removeConsultant(idx) {
 function renderConsultants() {
   populateConProjectDropdown();
   const filterType = (document.getElementById("con-filter-type") || { value: "all" }).value;
-  const filterProject = (document.getElementById("con-filter-project") || { value: "all" }).value;
+  const conQ = ((document.getElementById("con-search")||{}).value||"").toLowerCase().trim();
   const sortBy = (document.getElementById("con-sort") || { value: "project" }).value;
-  const projSel = document.getElementById("con-filter-project");
-  if (projSel) {
-    const current = projSel.value;
-    projSel.innerHTML = '<option value="all">All projects</option>';
-    const usedProjects = [...new Set(state.consultants.map((r) => r.project))].sort();
-    usedProjects.forEach((name) => {
-      const o = document.createElement("option");
-      o.value = name;
-      o.textContent = projLabel(name);
-      if (name === current) o.selected = true;
-      projSel.appendChild(o);
-    });
-  }
+
+  // Refresh type dropdown
   const typeSel = document.getElementById("con-filter-type");
   if (typeSel) {
     const curT = typeSel.value;
-    typeSel.innerHTML =
-      '<option value="all">All types</option>' +
-      getConTypes()
-        .map((t) => `<option value="${esc(t)}">${esc(t)}</option>`)
-        .join("");
+    typeSel.innerHTML = '<option value="all">All types</option>' +
+      getConTypes().map((t) => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
     typeSel.value = curT;
   }
+
+  // Filter — use projectCode throughout, no name lookups
   let rows = [...state.consultants];
-  if (filterProject !== "all") rows = rows.filter((r) => r.project === filterProject);
+  if (conQ) {
+    rows = rows.filter((r) =>
+      (r.projectCode||"").toLowerCase().includes(conQ) ||
+      (r.projectName||"").toLowerCase().includes(conQ) ||
+      (r.firm||"").toLowerCase().includes(conQ)
+    );
+  }
   if (filterType !== "all") rows = rows.filter((r) => r.type === filterType);
-  const cvOf = (name) => {
-    const p = state.projects.find((p) => p.name === name);
-    return p ? parseFloat(p.cv) || 0 : 0;
-  };
-  const codeOf = (name) => {
-    const p = state.projects.find((p) => p.name === name);
-    return p ? p.code : "";
-  };
+
+  // Sort
   rows.sort((a, b) => {
-    if (sortBy === "project") return (codeOf(b.project) || "").localeCompare(codeOf(a.project) || "");
-    if (sortBy === "type") return a.type.localeCompare(b.type);
-    if (sortBy === "fee") return (b.fee || 0) - (a.fee || 0);
+    if (sortBy === "project") return (b.projectCode||"").localeCompare(a.projectCode||"");
+    if (sortBy === "type") return (a.type||"").localeCompare(b.type||"");
+    if (sortBy === "fee") return (b.fee||0) - (a.fee||0);
     if (sortBy === "pct") {
-      const pa = cvOf(a.project) ? (a.fee || 0) / cvOf(a.project) : 0,
-        pb = cvOf(b.project) ? (b.fee || 0) / cvOf(b.project) : 0;
-      return pb - pa;
+      const pA = state._projectByCode[a.projectCode], pB = state._projectByCode[b.projectCode];
+      const cvA = pA ? parseFloat(pA.cv)||0 : 0, cvB = pB ? parseFloat(pB.cv)||0 : 0;
+      return (cvA ? (a.fee||0)/cvA : 0) < (cvB ? (b.fee||0)/cvB : 0) ? 1 : -1;
     }
     return 0;
   });
-  const totalFee = rows.reduce((s, r) => s + (r.fee || 0), 0);
+
+  // Metrics
+  const totalFee = rows.reduce((s, r) => s + (r.fee||0), 0);
   const byType = {};
-  rows.forEach((r) => {
-    byType[r.type] = (byType[r.type] || 0) + (r.fee || 0);
-  });
+  rows.forEach((r) => { byType[r.type] = (byType[r.type]||0) + (r.fee||0); });
   const topType = Object.entries(byType).sort((a, b) => b[1] - a[1])[0];
   const metricsEl = document.getElementById("con-metrics");
   if (metricsEl)
-    metricsEl.innerHTML = `<div class="metric"><div class="metric-label">Entries</div><div class="metric-value">${rows.length}</div></div><div class="metric"><div class="metric-label">Total ext. fees</div><div class="metric-sub">${fmtGBP(totalFee)}</div></div>${topType ? `<div class="metric"><div class="metric-label">Largest type</div><div class="metric-sub">${topType[0]}<br><span style="font-size:11px;color:var(--text3)">${fmtGBP(topType[1])}</span></div></div>` : ""}${getConTypes()
-      .map((t) => {
-        const v = byType[t] || 0;
-        return v > 0
-          ? `<div class="metric" style="border-left:3px solid ${CON_COLOURS[t]}"><div class="metric-label">${t}</div><div class="metric-sub">${fmtGBP(v)}</div></div>`
-          : "";
-      })
-      .join("")}`;
+    metricsEl.innerHTML =
+      `<div class="metric"><div class="metric-label">Entries</div><div class="metric-value">${rows.length}</div></div>` +
+      `<div class="metric"><div class="metric-label">Total ext. fees</div><div class="metric-sub">${fmtGBP(totalFee)}</div></div>` +
+      (topType ? `<div class="metric"><div class="metric-label">Largest type</div><div class="metric-sub">${topType[0]}<br><span style="font-size:11px;color:var(--text3)">${fmtGBP(topType[1])}</span></div></div>` : "") +
+      getConTypes().map((t) => {
+        const v = byType[t]||0;
+        return v > 0 ? `<div class="metric" style="border-left:3px solid ${CON_COLOURS[t]}"><div class="metric-label">${t}</div><div class="metric-sub">${fmtGBP(v)}</div></div>` : "";
+      }).join("");
+
+  // Group by project code — Z-A
+  const grouped = {};
+  rows.forEach((r) => {
+    if (!grouped[r.projectCode]) grouped[r.projectCode] = [];
+    grouped[r.projectCode].push(r);
+  });
+  const projectCodes = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
   const tbody = document.getElementById("con-body");
   if (!tbody) return;
   tbody.innerHTML = "";
+
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state">No consultant entries yet.</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state">No consultant entries match.</div></td></tr>`;
     return;
   }
-  rows.forEach((r) => {
-    const cv = cvOf(r.project);
-    const proj = state.projects.find((p) => p.name === r.project);
-    const mfbFee = proj ? (parseFloat(proj.arch) || 0) + (parseFloat(proj.regs) || 0) + (parseFloat(proj.bsa) || 0) : 0;
-    let vsBadge = "–";
-    if (r.fee && mfbFee) {
-      const ratio = r.fee / mfbFee;
-      if (ratio > 1) vsBadge = `<span class="badge badge-red">⚠ +${((ratio - 1) * 100).toFixed(0)}% over</span>`;
-      else vsBadge = `<span class="badge badge-green">${(ratio * 100).toFixed(0)}% of MFB</span>`;
-    }
-    const cv2 = cv;
-    const conPct = cv && r.fee ? (r.fee / cv) * 100 : null;
-    const conPctStr =
-      conPct !== null
-        ? `<span style="font-weight:600;color:${conPct > 10 ? "var(--red)" : conPct > 5 ? "var(--amber)" : "var(--green)"}">${conPct.toFixed(1)}%</span>`
+
+  projectCodes.forEach((code) => {
+    // Use _projectByCode; fall back to projectName stored on the record
+    const proj = state._projectByCode[code];
+    const conRows = grouped[code];
+    const projName = proj ? proj.name : conRows[0].projectName;
+    // Use the canonical code from the project object if available (guards against
+    // old records where projectCode was saved as a P-code before the fix)
+    const displayCode = proj ? proj.code : code;
+
+    const mfbFee = proj ? (parseFloat(proj.arch)||0) + (parseFloat(proj.regs)||0) + (parseFloat(proj.bsa)||0) : 0;
+    const cv = proj ? parseFloat(proj.cv)||0 : 0;
+    const totalConFee = conRows.reduce((s, r) => s + (r.fee||0), 0);
+    const totalConActual = conRows.some(r => r.actualCost !== null)
+      ? conRows.reduce((s, r) => s + (r.actualCost !== null ? r.actualCost : r.fee||0), 0)
+      : null;
+    const totalVariance = totalConActual !== null ? totalConActual - totalConFee : null;
+    const conPct = cv && totalConFee ? ((totalConFee / cv) * 100).toFixed(1) + "%" : "–";
+    const vsMFBRatio = mfbFee && totalConFee ? totalConFee / mfbFee : null;
+    const vsMFB = vsMFBRatio !== null
+      ? vsMFBRatio > 1
+        ? `<span class="badge badge-red">⚠ ${(vsMFBRatio*100).toFixed(0)}% of MFB</span>`
+        : `<span class="badge badge-green">${(vsMFBRatio*100).toFixed(0)}% of MFB</span>`
+      : "";
+
+    // Project header row — spans full width, clean layout
+    const htr = document.createElement("tr");
+    htr.style.cssText = "background:var(--surface2);border-top:2px solid var(--border)";
+    htr.innerHTML =
+      `<td style="padding:9px 12px;width:52px"><span class="code-chip">${esc(displayCode)}</span></td>` +
+      `<td style="padding:9px 8px;font-weight:600;font-size:13px">${esc(projName)}</td>` +
+      `<td style="padding:9px 8px;font-size:12px;color:var(--text3)">${conRows.length} consultant${conRows.length!==1?"s":""}</td>` +
+      `<td style="padding:9px 8px;font-size:12px;color:var(--text3)">${conPct} of CV &nbsp;${vsMFB}</td>` +
+      `<td class="num" style="padding:9px 8px;font-weight:700">${fmtGBP(totalConFee)}</td>` +
+      `<td class="num" style="padding:9px 8px;color:var(--text3)">${totalConActual !== null ? fmtGBP(totalConActual) : "–"}</td>` +
+      `<td class="num" style="padding:9px 8px">${totalVariance !== null
+        ? `<span style="color:${totalVariance>0?"var(--red)":totalVariance<0?"var(--green)":"var(--text3)"}">${totalVariance>0?"+":""}${fmtGBP(totalVariance)}</span>`
+        : "–"}</td>` +
+      `<td style="padding:9px 8px;text-align:right"><button class="btn btn-sm" onclick="addConsultantForProject('${esc(displayCode)}')">+ Add</button></td>`;
+    tbody.appendChild(htr);
+
+    // Consultant detail rows — indented under project header
+    conRows.forEach((r) => {
+      const realIdx = state.consultants.indexOf(r);
+      const typeBadge = `<span class="badge ${conTypeClass(r.type)}">${esc(r.type)}</span>`;
+      const actualStr = r.actualCost !== null ? fmtGBP(r.actualCost) : '<span style="color:var(--text3)">–</span>';
+      const variance = r.actualCost !== null && r.fee !== null ? r.actualCost - r.fee : null;
+      const varStr = variance !== null
+        ? `<span style="color:${variance>0?"var(--red)":variance<0?"var(--green)":"var(--text3)"}">${variance>0?"+":""}${fmtGBP(variance)}</span>`
         : "–";
-    const typeBadge = `<span class="badge ${conTypeClass(r.type)}">${esc(r.type)}</span>`;
-    const realIdx = state.consultants.indexOf(r);
-    const tr = document.createElement("tr");
-    const actualStr = r.actualCost !== null ? fmtGBP(r.actualCost) : '<span style="color:var(--text3)">not set</span>';
-    const variance = r.actualCost !== null && r.fee !== null ? r.actualCost - r.fee : null;
-    const varStr =
-      variance !== null
-        ? `<span style="color:${variance > 0 ? "var(--red)" : variance < 0 ? "var(--green)" : "var(--text3)"}">${variance > 0 ? "+" : ""}${fmtGBP(variance)}</span>`
-        : "–";
-    tr.innerHTML = `<td><span class="code-chip">${esc(codeOf(r.project))}</span></td><td style="font-weight:500">${esc(r.project)}</td><td>${typeBadge}</td><td style="font-size:12px;color:var(--text2)">${esc(r.firm || "–")}</td><td class="num">${fmtGBP(r.fee || 0)}</td><td class="num">${actualStr}</td><td class="num">${varStr}</td><td class="num">${conPctStr}</td><td>${vsBadge}</td><td style="font-size:12px;color:var(--text3)">${esc(r.notes)}</td><td style="white-space:nowrap"><button class="btn btn-sm" onclick="editConsultant(${realIdx})" style="margin-right:4px">Edit</button><button class="btn btn-sm btn-danger" onclick="removeConsultant(${realIdx})">Remove</button></td>`;
-    tbody.appendChild(tr);
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        `<td></td>` +
+        `<td style="padding:6px 8px 6px 24px;font-size:12px;color:var(--text2)">${r.firm ? esc(r.firm) : '<span style="color:var(--text3)">No firm set</span>'}</td>` +
+        `<td style="padding:6px 8px">${typeBadge}</td>` +
+        `<td style="padding:6px 8px;font-size:12px;color:var(--text3)">${esc(r.notes||"")}</td>` +
+        `<td class="num" style="padding:6px 8px">${fmtGBP(r.fee||0)}</td>` +
+        `<td class="num" style="padding:6px 8px">${actualStr}</td>` +
+        `<td class="num" style="padding:6px 8px">${varStr}</td>` +
+        `<td style="padding:6px 8px;white-space:nowrap;text-align:right">` +
+          `<button class="btn btn-sm" onclick="editConsultant(${realIdx})" style="margin-right:4px">Edit</button>` +
+          `<button class="btn btn-sm btn-danger" onclick="removeConsultant(${realIdx})">Remove</button>` +
+        `</td>`;
+      tbody.appendChild(tr);
+    });
   });
 }
 
@@ -3472,6 +3580,8 @@ function showAddProjectModal(editIdx) {
     });
     const ar = document.getElementById("pf-archrate");
     if (ar) ar.value = p.archRate || "";
+    const dc = document.getElementById("pf-completion");
+    if (dc) dc.value = p.designCompletion || "";
     updateFeePreview();
     saveBtn.onclick = () => saveProjectEdit(editIdx);
   } else {
@@ -3489,6 +3599,7 @@ function showAddProjectModal(editIdx) {
       "pf-notes",
       "pf-total",
       "pf-address",
+      "pf-completion",
     ].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.value = "";
@@ -3527,6 +3638,7 @@ function getProjectFormData() {
     archRate: parseFloat(document.getElementById("pf-archrate").value) || null,
     notes: document.getElementById("pf-notes").value.trim(),
     address: document.getElementById("pf-address").value.trim(),
+    designCompletion: document.getElementById("pf-completion").value || null,
   };
 }
 async function addProject() {
@@ -3565,6 +3677,7 @@ async function addProject() {
         status_date: "",
         status_note: "",
         converted_to: "",
+        design_completion: d.designCompletion || null,
       }),
     });
     setSyncStatus("ok", "Project saved");
@@ -3615,6 +3728,7 @@ async function saveProjectEdit(i) {
         status_date: p.statusDate || "",
         status_note: p.statusNote || "",
         converted_to: p.convertedTo || "",
+        design_completion: d.designCompletion || null,
       }),
     });
     setSyncStatus("ok", "Saved");
@@ -3626,6 +3740,15 @@ async function saveProjectEdit(i) {
   renderActiveTab();
 }
 let projFilter = "active";
+let projTypeFilter = "all";
+function setProjType(t) {
+  projTypeFilter = t;
+  ["all","C","P"].forEach(v => {
+    const el = document.getElementById("proj-type-" + (v === "all" ? "all" : v));
+    if (el) el.classList.toggle("active", v === t);
+  });
+  renderProjectList();
+}
 function setProjFilter(f) {
   projFilter = f;
   document.getElementById("proj-filter-active").classList.toggle("active", f === "active");
@@ -3816,8 +3939,16 @@ function renderProjectList() {
     return;
   }
   const sortBy = (document.getElementById("proj-sort") || { value: "code" }).value;
+  const projQ = ((document.getElementById("proj-search")||{}).value||"").toLowerCase().trim();
   let filtered = state.projects.map((p, i) => ({ p, i }));
-  if (projFilter === "active") filtered = filtered.filter(({ p }) => !p.status || p.status === "active");
+  if (projQ) {
+    // Search overrides all toggles — search everything
+    filtered = filtered.filter(({ p }) => (p.code||"").toLowerCase().includes(projQ) || (p.name||"").toLowerCase().includes(projQ));
+  } else {
+    if (projFilter === "active") filtered = filtered.filter(({ p }) => !p.status || p.status === "active");
+    if (projTypeFilter === "C") filtered = filtered.filter(({ p }) => /^C\d/i.test(p.code||""));
+    if (projTypeFilter === "P") filtered = filtered.filter(({ p }) => /^P\d/i.test(p.code||""));
+  }
   const sorted = filtered.sort((a, b) => {
     if (sortBy === "code") return (b.p.code || "").localeCompare(a.p.code || "");
     if (sortBy === "name") return (a.p.name || "").localeCompare(b.p.name || "");
@@ -4192,7 +4323,7 @@ function renderTargets() {
 
       // Consultant cost — actual if set, otherwise quoted fee
       state.consultants
-        .filter((c) => c.project === p.name)
+        .filter((c) => c.projectCode === p.code)
         .forEach((c) => {
           cell.conOverrun += c.actualCost != null ? c.actualCost : c.fee || 0;
         });
@@ -4580,7 +4711,7 @@ function renderNotBudgeted() {
       return con.fee === 0 || con.fee === null || (con.fee !== null && actual > con.fee);
     })
     .map((con) => {
-      const proj = state.projects.find((p) => p.name === con.project);
+      const proj = state._projectByCode[con.projectCode];
       const cv = proj && proj.cv ? parseFloat(proj.cv) : null;
       const allowance = con.fee || 0;
       const actual = con.actualCost || 0;
@@ -4588,7 +4719,7 @@ function renderNotBudgeted() {
       const pctCV = cv && actual > 0 ? (actual / cv) * 100 : null;
       const notBudgeted = con.fee === null || con.fee === 0;
       return {
-        project: con.project,
+        project: con.projectName,
         code: proj ? proj.code : "",
         type: con.type,
         firm: con.firm || "",
@@ -4713,8 +4844,10 @@ let _showArchived = false;
 // ── Tab: Resource Load ─────────────────────────────────
 function renderResource() {
   const allC = state.projects.filter((p) => p.code && /^C\d/.test(p.code));
-  const cProjs = _showArchived ? allC : allC.filter((p) => p.status !== "archived");
-  const archivedCount = allC.filter((p) => p.status === "archived").length;
+  const cProjs = _showArchived
+    ? allC
+    : allC.filter((p) => !p.status || p.status === "active");
+  const archivedCount = allC.filter((p) => p.status !== "active").length;
   const rows = cProjs
     .map((proj) => {
       const projIdx = state.projects.indexOf(proj);
@@ -4735,6 +4868,7 @@ function renderResource() {
         pct: totalFee > 0 ? (cost / totalFee) * 100 : 0,
         projIdx,
         projStatus: proj.status || "active",
+        designCompletion: proj.designCompletion || null,
       };
     })
     .filter((r) => r.totalFee > 0)
@@ -4778,14 +4912,13 @@ function renderResource() {
       )
       .join("");
 
-  const existingToggle = document.getElementById("resource-archive-toggle");
-  if (existingToggle) existingToggle.remove();
-  if (archivedCount > 0) {
-    const tog = document.createElement("div");
-    tog.id = "resource-archive-toggle";
-    tog.style.cssText = "margin-bottom:12px;font-size:12px;color:var(--text3)";
-    tog.innerHTML = `<button onclick="_showArchived=!_showArchived;renderResource()" style="background:none;border:none;cursor:pointer;color:var(--accent);font-size:12px;text-decoration:underline">${_showArchived ? "Hide" : "Show"} ${archivedCount} archived project${archivedCount !== 1 ? "s" : ""}</button>`;
-    document.getElementById("resource-summary-cards").after(tog);
+  // Update static toolbar toggles
+  const btnActive = document.getElementById("resource-show-active");
+  const btnAll = document.getElementById("resource-show-all");
+  if (btnActive) btnActive.classList.toggle("active", !_showArchived);
+  if (btnAll) {
+    btnAll.classList.toggle("active", _showArchived);
+    btnAll.textContent = `Show all${archivedCount > 0 ? " (" + archivedCount + " non-active)" : ""}`;
   }
 
   const tbody = document.getElementById("resource-body");
@@ -4798,6 +4931,17 @@ function renderResource() {
   rows.forEach((r) => {
     const bar = `<div style="background:var(--border);border-radius:4px;height:6px;width:100%"><div style="background:${r.pct > 90 ? "var(--red)" : r.pct > 70 ? "var(--amber)" : "var(--accent)"};height:6px;border-radius:4px;width:${Math.min((r.impliedQtrs / Math.max(...rows.map((x) => x.impliedQtrs), 1)) * 100, 100).toFixed(0)}%"></div></div>`;
     const tr = document.createElement("tr");
+    // Completion date display with urgency colouring
+    const dcStr = (() => {
+      if (!r.designCompletion) return '<span style="color:var(--text3)">–</span>';
+      const dc = new Date(r.designCompletion);
+      const now = new Date();
+      const daysLeft = Math.round((dc - now) / (1000 * 60 * 60 * 24));
+      const fmt = dc.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" });
+      const col = daysLeft < 0 ? "var(--red)" : daysLeft < 30 ? "var(--red)" : daysLeft < 90 ? "var(--amber)" : "var(--green)";
+      const label = daysLeft < 0 ? `<span style="font-size:10px;color:var(--red)"> overdue</span>` : daysLeft < 30 ? `<span style="font-size:10px;color:var(--amber)"> ${daysLeft}d</span>` : "";
+      return `<span style="color:${col};font-weight:500">${fmt}</span>${label}`;
+    })();
     tr.innerHTML = `<td><span class="code-chip">${esc(r.code)}</span></td>
       <td style="font-weight:500">${esc(r.name)}</td>
       <td class="num">${fmtGBP(r.totalFee)}</td>
@@ -4806,6 +4950,7 @@ function renderResource() {
       <td class="num" style="font-weight:700">${r.impliedQtrs}</td>
       <td class="num">${r.impliedHrs}</td>
       <td>${bar}</td>
+      <td style="white-space:nowrap">${dcStr}</td>
       <td><button class="btn btn-sm" onclick="archiveProject(${r.projIdx})" title="${r.projStatus === "archived" ? "Restore to active" : "Archive — remove from load view"}" style="color:${r.projStatus === "archived" ? "var(--green)" : "var(--text3)"};border-color:${r.projStatus === "archived" ? "var(--green)" : "var(--border)"};font-size:11px">${r.projStatus === "archived" ? "Restore" : "Archive"}</button></td>`;
     tbody.appendChild(tr);
   });
@@ -4833,9 +4978,14 @@ function renderMFBFees() {
   const sortBy = (document.getElementById("mfb-sort") || { value: "code" }).value;
   const mfbType = (document.getElementById("mfb-type-c") || {}).classList?.contains("active") ? "C" : "P";
   const mfbStatus = (document.getElementById("mfb-status-active") || {}).classList?.contains("active") ? "active" : "all";
+  const mfbQ = ((document.getElementById("mfb-search")||{}).value||"").toLowerCase().trim();
   const projs = [...state.projects.map((p, i) => ({ p, i }))]
     .filter(({ p }) => {
       if (!p.code) return false;
+      if (mfbQ) {
+        // Search overrides toggles — search all codes and statuses
+        return (p.code||"").toLowerCase().includes(mfbQ) || (p.name||"").toLowerCase().includes(mfbQ);
+      }
       const codeMatch = mfbType === "C" ? /^C\d/.test(p.code) : /^P\d/.test(p.code);
       if (!codeMatch) return false;
       if (mfbStatus === "active" && p.status && p.status !== "active") return false;
@@ -4872,20 +5022,53 @@ function renderMFBFees() {
       bsa = parseFloat(p.bsa) || 0;
     const total = arch + regs + bsa,
       cv = parseFloat(p.cv) || 0;
-    const pct = (v) =>
-      cv > 0 && v > 0 ? `<span style="color:var(--text3);font-size:11px">${fmtPct((v / cv) * 100)}</span>` : "–";
-    const totPct = cv > 0 && total > 0 ? fmtPct((total / cv) * 100) : "–";
+    const totPctNum = cv > 0 && total > 0 ? (total / cv) * 100 : null;
+
+    // Fee % colour — traffic light based on adequacy
+    const pctColor = totPctNum === null ? "var(--text3)"
+      : totPctNum < 5 ? "var(--red)"
+      : totPctNum < 8 ? "var(--amber)"
+      : "var(--green)";
+
+    // Per-fee % labels
+    const pct = (v) => cv > 0 && v > 0
+      ? `<span style="color:var(--text3);font-size:11px">${fmtPct((v / cv) * 100)}</span>`
+      : "";
+
+    // Fee completeness — which fees are set?
+    const missingFees = [];
+    if (!arch) missingFees.push("Arch");
+    if (!regs) missingFees.push("Regs");
+    if (!bsa) missingFees.push("BSA");
+    const incomplete = missingFees.length > 0 && missingFees.length < 3;
+
+    // Mini bar showing fee as % of CV
+    const barWidth = totPctNum !== null ? Math.min(totPctNum / 15 * 100, 100).toFixed(0) : 0;
+    const feeBar = cv > 0 && total > 0
+      ? `<div style="margin-top:3px;height:3px;background:var(--border);border-radius:99px;width:80px"><div style="width:${barWidth}%;height:100%;background:${pctColor};border-radius:99px"></div></div>`
+      : "";
+
+    // Row left border colour based on fee health
+    const rowBorder = totPctNum === null ? "transparent"
+      : totPctNum < 5 ? "var(--red)"
+      : totPctNum < 8 ? "var(--amber)"
+      : "var(--green)";
+
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td><span class="code-chip">${esc(p.code)}</span></td>
-      <td style="font-weight:500">${esc(p.name)}</td>
-      <td class="num">${cv > 0 ? fmtGBP(cv) : "–"}</td>
-      <td class="num">${arch > 0 ? fmtGBP(arch) : "–"}</td><td class="num">${pct(arch)}</td>
-      <td class="num">${regs > 0 ? fmtGBP(regs) : "–"}</td><td class="num">${pct(regs)}</td>
-      <td class="num">${bsa > 0 ? fmtGBP(bsa) : "–"}</td><td class="num">${pct(bsa)}</td>
-      <td class="num" style="font-weight:600">${total > 0 ? fmtGBP(total) : "–"}</td>
-      <td class="num" style="font-weight:600;color:${cv > 0 && total > 0 && total / cv > 0.1 ? "var(--amber)" : "inherit"}">${totPct}</td>
-      <td class="num" style="font-size:12px">${p.archRate ? "£" + p.archRate + "/hr" : '<span style="color:var(--text3)">global</span>'}</td>
-      <td><button class="btn btn-sm" onclick="showAddProjectModal(${i})">Edit</button></td>`;
+    tr.style.borderLeft = `3px solid ${rowBorder}`;
+    tr.innerHTML =
+      `<td><span class="code-chip">${esc(p.code)}</span></td>` +
+      `<td style="font-weight:500">${esc(p.name)}${incomplete ? `<span style="font-size:10px;color:var(--amber);margin-left:6px">missing ${missingFees.join(", ")}</span>` : ""}</td>` +
+      `<td class="num">${cv > 0 ? fmtGBP(cv) : '<span style="color:var(--text3)">–</span>'}</td>` +
+      `<td class="num">${arch > 0 ? fmtGBP(arch) : '<span style="color:var(--border2)">–</span>'}</td><td class="num">${pct(arch)}</td>` +
+      `<td class="num">${regs > 0 ? fmtGBP(regs) : '<span style="color:var(--border2)">–</span>'}</td><td class="num">${pct(regs)}</td>` +
+      `<td class="num">${bsa > 0 ? fmtGBP(bsa) : '<span style="color:var(--border2)">–</span>'}</td><td class="num">${pct(bsa)}</td>` +
+      `<td class="num" style="font-weight:700">${total > 0 ? fmtGBP(total) : '<span style="color:var(--text3)">–</span>'}</td>` +
+      `<td class="num"><span style="font-weight:600;color:${pctColor}">${totPctNum !== null ? fmtPct(totPctNum) : "–"}</span>${feeBar}</td>` +
+      `<td class="num">${p.archRate
+        ? `<span style="background:var(--accent-bg);color:var(--accent);border-radius:4px;padding:2px 6px;font-size:11px;font-weight:600">£${p.archRate}/hr</span>`
+        : '<span style="color:var(--text3);font-size:11px">global</span>'}</td>` +
+      `<td><button class="btn btn-sm" onclick="showAddProjectModal(${i})">Edit</button></td>`;
     tbody.appendChild(tr);
   });
   // Totals row
@@ -5544,7 +5727,7 @@ function ovDMonthQ(d, y, m) {
   return t;
 }
 function ovDisc(name) {
-  const t = [...new Set(state.consultants.filter((c) => c.project === name && c.type).map((c) => c.type))];
+  const t = [...new Set(state.consultants.filter((c) => (c.projectName === name || c.projectCode === name) && c.type).map((c) => c.type))];
   return t.slice(0, 2).join(" · ");
 }
 function ovMonthsIn(period, ref) {
@@ -5708,7 +5891,7 @@ function ovRenderAtt() {
         ic: "amber",
         sv: '<circle cx="8" cy="8" r="6.5"/><path d="M5.5 8h5M8 5.5v5"/>',
         t: "Unbudgeted " + esc(c.type || "consultant") + " cost",
-        s: ovK(c.actualCost) + " on " + esc(c.project) + " with no fee line.",
+        s: ovK(c.actualCost) + " on " + esc(c.projectCode) + " with no fee line.",
         a: "Assign",
         m: "notbudgeted",
         sev: 1,
