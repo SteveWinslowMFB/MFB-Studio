@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFB Studio V10.1 - Rebuilt DB</title>
+<title>MFB Studio V10.2 - Rebuilt DB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
@@ -1124,7 +1124,7 @@ html[data-accent="indigo"]{--accent:#5145C8;--accent-bg:#ECEBFA}
 </div>
 <script>
 // ╔═══════════════════════════════════════════════════════════════════════════╗
-// ║  MFB STUDIO V10.1 — REBUILT DB\n// build-20260629-1900                                               ║
+// ║  MFB STUDIO V10.2 — REBUILT DB\n// build-20260629-2000                                               ║
 // ║  Sections: CONFIG · UTILS · AUTH · CACHE · DATA · SHELL · TABS           ║
 // ╚═══════════════════════════════════════════════════════════════════════════╝
 
@@ -1393,7 +1393,7 @@ function saveSettings() {
   } catch (e) {}
 }
 const CACHE_KEY = "mfb_v9_codes1";
-const BUILD = { version: '10.1', date: '2026-06-24', label: 'MFB Studio' };
+const BUILD = { version: '10.2', date: '2026-06-24', label: 'MFB Studio' };
 console.log(`%c ${BUILD.label} %c v${BUILD.version} · ${BUILD.date} `, 'background:#2563EB;color:#fff;font-weight:600;padding:2px 0;border-radius:4px 0 0 4px','background:#1C1B18;color:#fff;padding:2px 0;border-radius:0 4px 4px 0');
 const CACHE_TTL = 15 * 60 * 1000;
 function saveCache(d) {
@@ -1586,8 +1586,9 @@ async function apiCall(params) {
         const { error } = await sb_client.from("projects").update(row).eq("id", data.id);
         if (error) throw error;
       } else {
-        const { error } = await sb_client.from("projects").insert(row);
+        const { data: inserted, error } = await sb_client.from("projects").insert(row).select("id").single();
         if (error) throw error;
+        return { ok: true, id: inserted.id };
       }
       return { ok: true };
     }
@@ -1604,8 +1605,9 @@ async function apiCall(params) {
         const { error } = await sb_client.from("designers").update(row).eq("id", data.id);
         if (error) throw error;
       } else {
-        const { error } = await sb_client.from("designers").insert(row);
+        const { data: inserted, error } = await sb_client.from("designers").insert(row).select("id").single();
         if (error) throw error;
+        return { ok: true, id: inserted.id };
       }
       return { ok: true };
     }
@@ -1622,8 +1624,9 @@ async function apiCall(params) {
         const { error } = await sb_client.from("precon_staff").update(row).eq("id", data.id);
         if (error) throw error;
       } else {
-        const { error } = await sb_client.from("precon_staff").insert(row);
+        const { data: inserted, error } = await sb_client.from("precon_staff").insert(row).select("id").single();
         if (error) throw error;
+        return { ok: true, id: inserted.id };
       }
       return { ok: true };
     }
@@ -1678,8 +1681,9 @@ async function apiCall(params) {
         const { error } = await sb_client.from("consultants").update(row).eq("id", data.id);
         if (error) throw error;
       } else {
-        const { error } = await sb_client.from("consultants").insert(row);
+        const { data: inserted, error } = await sb_client.from("consultants").insert(row).select("id").single();
         if (error) throw error;
+        return { ok: true, id: inserted.id };
       }
       return { ok: true };
     }
@@ -3357,7 +3361,7 @@ async function addConsultant() {
       conEditIdx = null;
     } else {
       const proj3 = state._projectById[projId];
-      state.consultants.push({
+      const newEntry = {
         id: "tmp-" + Date.now(),
         projectId: projId,
         projectCode: proj3?.code || "",
@@ -3367,8 +3371,9 @@ async function addConsultant() {
         fee,
         actualCost,
         notes,
-      });
-      await apiCall({
+      };
+      state.consultants.push(newEntry);
+      const result = await apiCall({
         action: "saveConsultant",
         data: JSON.stringify({
           project_id: projId,
@@ -3379,6 +3384,8 @@ async function addConsultant() {
           notes,
         }),
       });
+      // Replace tmp ID with real DB UUID immediately
+      if (result?.id) newEntry.id = result.id;
       setSyncStatus("ok", "Saved");
     }
   } catch (e) {
